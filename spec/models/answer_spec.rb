@@ -1,5 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context 'assosiation' do
+    it { should belong_to(:question) }
+  end
+
+  context 'validation' do
+    it { should validate_presence_of(:body) }
+    it { should validate_length_of(:body).is_at_least(5) }
+
+    it 'validates presence of question_id' do
+      expect(Answer.new(body: 'Test')).to_not be_valid
+    end
+  end
 end
