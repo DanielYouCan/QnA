@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :answer do
     title "MyString"
     body "MyString"
-    Question nil
+    question
   end
 end
