@@ -5,4 +5,13 @@ module AcceptanceHelper
     fill_in 'Password', with: user.password
     click_on 'Log in'
   end
+
+  def view_index
+    visit questions_path
+    expect(page).to have_content 'Questions list'
+
+    questions.each do |q|
+      expect(page).to have_content q.title
+    end
+  end
 end
