@@ -12,7 +12,9 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:questions)).to match_array(questions)
     end
 
-    it { should render_template('index') }
+    it 'renders index view' do
+      expect(response).to render_template :index
+    end
   end
 
   describe 'GET #show' do
@@ -22,7 +24,9 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
-    it { should render_template('show') }
+    it 'renders show view' do
+      expect(response).to render_template :show
+    end
   end
 
   describe 'GET #new' do
@@ -31,7 +35,9 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to be_a_new(Question)
     end
 
-    it { should render_template('new') }
+    it 'renders new view' do
+      expect(response).to render_template :new
+    end
   end
 
   describe 'GET #edit' do
@@ -41,7 +47,9 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
-    it { should render_template('edit') }
+    it 'renders edit view' do
+      expect(response).to render_template :edit
+    end
   end
 
   describe 'POST #create' do
