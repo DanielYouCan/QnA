@@ -1,0 +1,10 @@
+= form_with model: @question, local: true do |f|
+  p
+    = f.label :title
+    br
+    = f.text_field :title, id: :question_title
+  p
+    = f.label :body
+    br
+    = f.text_field :body, id: :question_body
+  p= f.submit 'Create'
