@@ -1,0 +1,11 @@
+p
+  = @question.title
+  br
+  = @question.body
+
+
+p
+  b Answers:
+  = render @question.answers
+
+= render 'answers/form'

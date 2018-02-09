@@ -14,4 +14,16 @@ module AcceptanceHelper
       expect(page).to have_content q.title
     end
   end
+
+  def view_question
+    visit question_path(question)
+
+    expect(page).to have_content question.title
+    expect(page).to have_content question.body
+
+    question.answers.each do |answer|
+      expect(page).to have_content answer.body
+    end
+  end
+
 end
