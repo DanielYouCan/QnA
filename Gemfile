@@ -33,6 +33,7 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'slim-rails'
+gem 'bootstrap', '~> 4.0.0'
 gem 'devise'
 
 group :development, :test do
