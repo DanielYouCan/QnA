@@ -17,10 +17,11 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.create(question_params)
+    @question = Question.new(question_params)
+    @question.user = current_user
+
     if @question.save
-      redirect_to @question
-      flash[:notice] = 'Your question was successfully created.'
+      redirect_to @question, notice: 'Your question was successfully created.'
     else
       render :new
     end
@@ -28,15 +29,20 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
-      redirect_to @question
+      redirect_to @question, notice: 'Your question was successfully updated.'
     else
       render :edit
     end
   end
 
   def destroy
-    @question.destroy
-    redirect_to questions_path
+    if current_user.is_author?(@question)
+      @question.destroy
+      redirect_to questions_path, notice: 'Your question was successfully deleted.'
+    else
+      flash.now[:warning] = "You can't delete this question."
+      render :show
+    end
   end
 
   private

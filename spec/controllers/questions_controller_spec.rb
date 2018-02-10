@@ -66,6 +66,11 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to question_path(assigns(:question))
       end
+
+      it 'shows notice flash message' do
+        post :create, params: { question: attributes_for(:question) }
+        expect(controller).to set_flash[:notice].to('Your question was successfully created.')
+      end
     end
 
     context 'with invalid attributes' do
@@ -82,6 +87,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'PUT #update' do
     sign_in_user
+
     context 'valid attributes' do
       it 'assings the requested question to @question' do
         put :update, params: { id: question, question: attributes_for(:question) }
@@ -98,6 +104,11 @@ RSpec.describe QuestionsController, type: :controller do
       it 'redirects to the updated question' do
         put :update, params: { id: question, question: attributes_for(:question) }
         expect(response).to redirect_to question
+      end
+
+      it 'shows notice flash message' do
+        put :update, params: { id: question, question: attributes_for(:question) }
+        expect(controller).to set_flash[:notice].to('Your question was successfully updated.')
       end
     end
 
@@ -119,15 +130,44 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'DELETE #destroy' do
     sign_in_user
-    before { question }
+    let(:my_question) { create(:question, user: @user )}
 
-    it 'deletes question' do
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+    before do
+       my_question
+       question
+     end
+
+    context 'user is the author of the question' do
+      it 'deletes question' do
+        expect { delete :destroy, params: { id: my_question } }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirect to index view' do
+        delete :destroy, params: { id: my_question }
+        expect(response).to redirect_to questions_path
+      end
+
+      it 'shows notice flash message' do
+        delete :destroy, params: { id: my_question }
+        expect(controller).to set_flash[:notice].to('Your question was successfully deleted.')
+      end
     end
 
-    it 'redirect to index view' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+    context 'user is not the author of the question' do
+      it 'does not delete question' do
+        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(0)
+      end
+
+      it 'shows a warning flash message' do
+        delete :destroy, params: { id: question }
+        expect(controller).to set_flash.now[:warning].to("You can't delete this question.")
+      end
+
+      it 're-renders show view' do
+        delete :destroy, params: { id: question }
+        expect(response).to render_template :show
+      end
     end
+
   end
 end

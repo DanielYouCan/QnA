@@ -2,8 +2,9 @@ p
   = @question.title
   br
   = @question.body
-
-
+  br
+  - if user_signed_in?
+    = link_to 'Delete question', question_path(@question), method: :delete
 p
   b Answers:
   = render @question.answers
