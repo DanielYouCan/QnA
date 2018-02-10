@@ -18,15 +18,13 @@ feature 'User deletes his question', %q{
 
     expect(page).to have_content 'Your question was successfully deleted'
     expect(current_path).to eq questions_path
+    expect(page).to_not have_content question.title
   end
 
   scenario 'User tries to delete someone else question' do
     sign_in(another_user)
     visit question_path(question)
 
-    click_on 'Delete question'
-
-    expect(page).to have_content "You can't delete this question."
-    expect(current_path).to eq question_path(question)
+    expect(page).to_not have_content 'Delete question'
   end
 end

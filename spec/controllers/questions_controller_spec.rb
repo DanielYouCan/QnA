@@ -155,7 +155,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'user is not the author of the question' do
       it 'does not delete question' do
-        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(0)
+        expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
       end
 
       it 'shows a warning flash message' do

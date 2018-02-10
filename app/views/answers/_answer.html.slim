@@ -1,2 +1,4 @@
 p
   = answer.body
+  - if user_signed_in? && current_user.is_author?(answer)
+    = link_to 'Delete answer', answer_path(answer), method: :delete
