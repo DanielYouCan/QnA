@@ -11,6 +11,7 @@ class AnswersController < ApplicationController
       redirect_to question_path(@question), notice: 'Answer was succefully added'
     else
       flash.now[:warning] = 'Invalid attributes for answer'
+      render :create
     end
   end
 

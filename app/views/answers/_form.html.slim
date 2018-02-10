@@ -1,6 +1,6 @@
-= form_with model: [@question, @question.answers.build], local: true do |f|
+= form_with model: [@question, @question.answers.build] do |f|
   p
     = f.label :body
     br
-    = f.text_field :body, id: :answer_body
+    = f.text_area :body, rows: 6, cols: 50
   p= f.submit 'Answer'

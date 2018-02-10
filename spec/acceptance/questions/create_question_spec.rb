@@ -13,10 +13,12 @@ feature 'User creates question', %q{
 
     visit questions_path
     click_on 'Ask question'
-    fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'Test body'
+    fill_in 'question[title]', with: 'Test question'
+    fill_in 'question[body]', with: 'Test body'
     click_on 'Create'
 
+    expect(page).to have_content Question.last.title
+    expect(page).to have_content Question.last.body
     expect(page).to have_content 'Your question was successfully created.'
   end
 
@@ -25,5 +27,17 @@ feature 'User creates question', %q{
     click_on 'Ask question'
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
+  end
+
+  scenario 'Invalid attributes for question' do
+    sign_in(user)
+
+    visit questions_path
+    click_on 'Ask question'
+    fill_in 'question[title]', with: 'Test'
+    fill_in 'question[body]', with: 'Test'
+    click_on 'Create'
+
+    expect(page).to have_content 'Invalid attributes for a new question'
   end
 end

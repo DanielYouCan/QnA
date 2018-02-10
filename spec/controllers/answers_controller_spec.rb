@@ -16,6 +16,11 @@ RSpec.describe AnswersController, type: :controller do
         post :create, params: { question_id: question, answer: attributes_for(:answer) }
         expect(response).to redirect_to question_path(question)
       end
+
+      it 'belongs to signed in user' do
+        post :create, params: { question_id: question, answer: attributes_for(:answer) }
+        expect(Answer.last.user).to eq @user
+      end
     end
 
     context 'invalid attributes' do
@@ -26,6 +31,11 @@ RSpec.describe AnswersController, type: :controller do
       it 'shows flash message' do
         post :create, params: { question_id: question, answer: attributes_for(:invalid_answer) }
         expect(controller).to set_flash.now[:warning].to('Invalid attributes for answer')
+      end
+
+      it 're-renders create view' do
+        post :create, params: { question_id: question, answer: attributes_for(:invalid_answer) }
+        expect(response).to render_template :create
       end
     end
   end
