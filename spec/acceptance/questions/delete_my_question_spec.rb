@@ -25,12 +25,12 @@ feature 'User deletes his question', %q{
     sign_in(another_user)
     visit question_path(question)
 
-    expect(page).to_not have_content 'Delete question'
+    expect(page).to_not have_link 'Delete question'
   end
 
   scenario 'Guest tries to delete question' do
     visit question_path(question)
 
-    expect(page).to_not have_content 'Delete question'
+    expect(page).to_not have_link'Delete question'
   end
 end

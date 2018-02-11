@@ -17,8 +17,8 @@ feature 'User creates question', %q{
     fill_in 'question[body]', with: 'Test body'
     click_on 'Create'
 
-    expect(page).to have_content Question.last.title
-    expect(page).to have_content Question.last.body
+    expect(page).to have_content 'Test question'
+    expect(page).to have_content 'Test body'
     expect(page).to have_content 'Your question was successfully created.'
   end
 
@@ -35,9 +35,10 @@ feature 'User creates question', %q{
     visit questions_path
     click_on 'Ask question'
     fill_in 'question[title]', with: 'Test'
-    fill_in 'question[body]', with: 'Test'
     click_on 'Create'
 
     expect(page).to have_content 'Invalid attributes for a new question'
+    expect(page).to have_content 'Title is too short'
+    expect(page).to have_content "Body can't be blank"
   end
 end

@@ -19,7 +19,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'belongs to signed in user' do
         post :create, params: { question_id: question, answer: attributes_for(:answer) }
-        expect(Answer.last.user).to eq @user
+        expect(question.answers.last.user_id).to eq @user.id
       end
     end
 
@@ -35,7 +35,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 're-renders create view' do
         post :create, params: { question_id: question, answer: attributes_for(:invalid_answer) }
-        expect(response).to render_template :create
+        expect(response).to render_template 'questions/show'
       end
     end
   end
@@ -54,7 +54,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirects to question' do
         delete :destroy, params: { id: answer }
-        expect(response).to redirect_to question_path(question.id + 1)
+        expect(response).to redirect_to question_path(assigns(:question))
       end
 
       it 'shows notice flash message' do

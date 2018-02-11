@@ -9,7 +9,7 @@ feature 'User adds answer to question', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question) }
 
-  scenario 'Authenticated user add answer to the question' do
+  scenario 'Authenticated user adds answer to the question' do
     sign_in(user)
 
     visit question_path(question)
@@ -18,7 +18,7 @@ feature 'User adds answer to question', %q{
     click_on 'Answer'
 
     expect(page).to have_content 'Answer was succefully added'
-    expect(page).to have_content question.answers.last.body
+    expect(page).to have_content 'My unique answer'
   end
 
   scenario 'Guest tries to add answer to the question' do
@@ -37,6 +37,7 @@ feature 'User adds answer to question', %q{
     click_on 'Answer'
 
     expect(page).to have_content 'Invalid attributes for answer'
+    expect(page).to have_content 'Body is too short'
   end
 
 end

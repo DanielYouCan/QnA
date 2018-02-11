@@ -11,14 +11,14 @@ class AnswersController < ApplicationController
       redirect_to question_path(@question), notice: 'Answer was succefully added'
     else
       flash.now[:warning] = 'Invalid attributes for answer'
-      render :create
+      render 'questions/show'
     end
   end
 
   def destroy
     @question = @answer.question
 
-    if current_user.is_author?(@answer)
+    if current_user.author_of?(@answer)
       @answer.destroy
       redirect_to @question, notice: 'Your answer was successfully deleted.'
     else

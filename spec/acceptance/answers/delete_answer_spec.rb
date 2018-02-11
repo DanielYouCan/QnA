@@ -25,12 +25,12 @@ feature 'User deletes his/her answer', %q{
     sign_in(another_user)
 
     visit question_path(question)
-    expect(page).to_not have_content 'Delete answer'
+    expect(page).to_not have_link 'Delete answer'
   end
 
   scenario 'Guest user tries to delete answer' do
     visit question_path(question)
 
-    expect(page).to_not have_content 'Delete answer'
+    expect(page).to_not have_link 'Delete answer'
   end
 end
