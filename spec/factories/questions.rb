@@ -5,7 +5,7 @@ FactoryBot.define do
 
   factory :question do
     title
-    body "MyString"
+    body "MyText"
     user
   end
 
