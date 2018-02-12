@@ -7,5 +7,5 @@
   p
     = f.label :body
     br
-    = f.text_field :body, id: :question_body
+    = f.text_area :body, id: :question_body, rows: 6, cols: 50
   p= f.submit 'Create'

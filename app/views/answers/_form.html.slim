@@ -1,5 +1,4 @@
-= form_with model: [@question, @question.answers.build] do |f|
-  = render 'shared/errors', resource: @answer
+= form_with model: [@question, @question.answers.build], remote: true do |f|
   p
     = f.label :body
     br

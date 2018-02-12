@@ -6,13 +6,7 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
-
-    if @answer.save
-      redirect_to question_path(@question), notice: 'Answer was succefully added'
-    else
-      flash.now[:warning] = 'Invalid attributes for answer'
-      render 'questions/show'
-    end
+    @answer.save
   end
 
   def destroy
