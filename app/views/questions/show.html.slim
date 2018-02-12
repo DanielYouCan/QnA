@@ -1,0 +1,12 @@
+p
+  = @question.title
+  br
+  = @question.body
+  br
+  - if current_user&.author_of?(@question)
+    = link_to 'Delete question', question_path(@question), method: :delete
+p
+  b Answers:
+  = render @question.answers
+
+= render 'answers/form'

@@ -1,4 +1,5 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!, except: %i[index show]
   before_action :set_question, only: %i[show edit update destroy]
 
   def index
@@ -16,25 +17,32 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.create(question_params)
+    @question = current_user.questions.new(question_params)
+
     if @question.save
-      redirect_to @question
+      redirect_to @question, notice: 'Your question was successfully created.'
     else
+      flash.now[:warning] =  'Invalid attributes for a new question'
       render :new
     end
   end
 
   def update
     if @question.update(question_params)
-      redirect_to @question
+      redirect_to @question, notice: 'Your question was successfully updated.'
     else
       render :edit
     end
   end
 
   def destroy
-    @question.destroy
-    redirect_to questions_path
+    if current_user.author_of?(@question)
+      @question.destroy
+      redirect_to questions_path, notice: 'Your question was successfully deleted.'
+    else
+      flash.now[:warning] = "You can't delete this question."
+      render :show
+    end
   end
 
   private
