@@ -14,7 +14,7 @@ feature 'User adds answer to question', %q{
 
     visit question_path(question)
 
-    fill_in 'answer[body]', with: 'My unique answer'
+    fill_in 'Body', with: 'My unique answer'
     click_on 'Answer'
 
     expect(page).to have_content 'Answer was succefully added'
@@ -23,7 +23,7 @@ feature 'User adds answer to question', %q{
 
   scenario 'Guest tries to add answer to the question' do
     visit question_path(question)
-    fill_in 'answer[body]', with: 'My unique answer'
+    fill_in 'Body', with: 'My unique answer'
     click_on 'Answer'
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
@@ -33,7 +33,7 @@ feature 'User adds answer to question', %q{
     sign_in(user)
     visit question_path(question)
 
-    fill_in 'answer[body]', with: 'Abc'
+    fill_in 'Body', with: 'Abc'
     click_on 'Answer'
 
     expect(page).to have_content 'Invalid attributes for answer'

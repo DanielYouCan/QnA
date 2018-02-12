@@ -13,8 +13,8 @@ feature 'User creates question', %q{
 
     visit questions_path
     click_on 'Ask question'
-    fill_in 'question[title]', with: 'Test question'
-    fill_in 'question[body]', with: 'Test body'
+    fill_in 'Title', with: 'Test question'
+    fill_in 'Body', with: 'Test body'
     click_on 'Create'
 
     expect(page).to have_content 'Test question'
@@ -34,7 +34,7 @@ feature 'User creates question', %q{
 
     visit questions_path
     click_on 'Ask question'
-    fill_in 'question[title]', with: 'Test'
+    fill_in 'Title', with: 'Test'
     click_on 'Create'
 
     expect(page).to have_content 'Invalid attributes for a new question'
