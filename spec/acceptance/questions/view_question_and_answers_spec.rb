@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'User views question and answers to it', %q{
   In order to get answers for the question
