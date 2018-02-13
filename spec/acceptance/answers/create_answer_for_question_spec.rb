@@ -9,34 +9,33 @@ feature 'User adds answer to question', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question) }
 
-  scenario 'Authenticated user adds answer to the question' do
+  scenario 'Authenticated user adds answer to the question', js: true do
     sign_in(user)
 
     visit question_path(question)
 
-    fill_in 'answer[body]', with: 'My unique answer'
+    fill_in 'Body', with: 'My unique answer'
     click_on 'Answer'
 
-    expect(page).to have_content 'Answer was succefully added'
-    expect(page).to have_content 'My unique answer'
+    within '.answers' do
+      expect(page).to have_content 'My unique answer'
+    end
   end
 
-  scenario 'Guest tries to add answer to the question' do
+  scenario 'Guest tries to add answer to the question', js: true do
     visit question_path(question)
-    fill_in 'answer[body]', with: 'My unique answer'
-    click_on 'Answer'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to_not have_content 'Body'
+    expect(page).to_not have_link 'Answer'
   end
 
-  scenario 'Invalid attributes' do
+  scenario 'Invalid attributes', js: true do
     sign_in(user)
     visit question_path(question)
 
-    fill_in 'answer[body]', with: 'Abc'
+    fill_in 'Body', with: 'Abc'
     click_on 'Answer'
 
-    expect(page).to have_content 'Invalid attributes for answer'
     expect(page).to have_content 'Body is too short'
   end
 
