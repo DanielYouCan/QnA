@@ -73,17 +73,12 @@ RSpec.describe AnswersController, type: :controller do
     context 'User deletes his/her answer' do
 
       it 'deletes the answer' do
-        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, params: { id: answer, format: :js  } }.to change(Answer, :count).by(-1)
       end
 
-      it 'redirects to question' do
-        delete :destroy, params: { id: answer }
-        expect(response).to redirect_to question_path(assigns(:question))
-      end
-
-      it 'shows notice flash message' do
-        delete :destroy, params: { id: answer }
-        expect(controller).to set_flash[:notice].to('Your answer was successfully deleted.')
+      it 'renders the question' do
+        delete :destroy, params: { id: answer, format: :js  }
+        expect(response).to render_template :destroy
       end
     end
 
@@ -92,17 +87,12 @@ RSpec.describe AnswersController, type: :controller do
       let!(:new_answer) { create(:answer, question: question, user: new_user) }
 
       it 'does not delete the answer' do
-        expect { delete :destroy, params: { id: new_answer } }.to_not change(Answer, :count)
-      end
-
-      it 'shows warning flash message' do
-        delete :destroy, params: { id: new_answer }
-        expect(controller).to set_flash.now[:warning].to("You can't delete this answer.")
+        expect { delete :destroy, params: { id: new_answer, format: :js  } }.to_not change(Answer, :count)
       end
 
       it 'renders question show' do
-        delete :destroy, params: { id: new_answer }
-        expect(response).to render_template :show
+        delete :destroy, params: { id: new_answer, format: :js  }
+        expect(response).to render_template :destroy
       end
     end
   end
