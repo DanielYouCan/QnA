@@ -9,6 +9,7 @@ feature 'Answer editing', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question) }
   given(:answer) { create(:answer, question: question) }
+  given(:another_user) { create(:user) }
 
   scenario 'Guest tries to edit answer' do
     visit question_path(question)
@@ -17,8 +18,12 @@ feature 'Answer editing', %q{
   end
 
   scenario 'tries to edit someone else answer' do
-    sign_in(answer.user)
+    sign_in(another_user)
     visit question_path(question)
+
+    within '.answers' do
+      expect(page).to_not have_link 'Edit'
+    end
   end
 
   describe 'Author user' do
@@ -36,13 +41,23 @@ feature 'Answer editing', %q{
 
     scenario 'tries to edit his/her answer', js: true do
       click_on 'Edit'
-      within .answers do
+      within '.answers' do
         fill_in 'Answer', with: 'edited answer'
-        click_on 'Save'
+        click_on 'Update Answer'
 
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'edited answer'
         expect(page).to_not have_selector 'textarea'
+      end
+    end
+
+    scenario 'invalid attributes for answer', js: true do
+      click_on 'Edit'
+      within '.answers' do
+        click_on 'Update Answer'
+
+        expect(page).to have_content answer.body
+        expect(page).to have_selector 'textarea'
       end
     end
 
