@@ -33,7 +33,6 @@ feature 'Answer editing', %q{
     end
 
     scenario 'sees link edit' do
-
       within '.answers' do
         expect(page).to have_link 'Edit'
       end

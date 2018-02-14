@@ -1,10 +1,4 @@
-p
-  h1= @question.title
-  br
-  = @question.body
-  br
-  - if current_user&.author_of?(@question)
-    = link_to 'Delete question', question_path(@question), method: :delete
+= render 'question'
 p
   b Answers:
   .answers

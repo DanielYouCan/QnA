@@ -42,19 +42,6 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    sign_in_user
-    before { get :edit, params: { id: question } }
-
-    it 'assings the requested question to @question' do
-      expect(assigns(:question)).to eq question
-    end
-
-    it 'renders edit view' do
-      expect(response).to render_template :edit
-    end
-  end
-
   describe 'POST #create' do
     sign_in_user
 
@@ -98,30 +85,25 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'valid attributes' do
       it 'assings the requested question to @question' do
-        put :update, params: { id: question, question: attributes_for(:question) }
+        put :update, params: { id: question, question: attributes_for(:question), format: :js }
         expect(assigns(:question)).to eq question
       end
 
       it 'changes question attributes' do
-        put :update, params: { id: question, question: { title: 'new title', body: 'new body' } }
+        put :update, params: { id: question, question: { title: 'new title', body: 'new body' }, format: :js }
         question.reload
         expect(question.title).to eq 'new title'
         expect(question.body).to eq 'new body'
       end
 
       it 'redirects to the updated question' do
-        put :update, params: { id: question, question: attributes_for(:question) }
-        expect(response).to redirect_to question
-      end
-
-      it 'shows notice flash message' do
-        put :update, params: { id: question, question: attributes_for(:question) }
-        expect(controller).to set_flash[:notice].to('Your question was successfully updated.')
+        put :update, params: { id: question, question: attributes_for(:question), format: :js }
+        expect(response).to render_template :update
       end
     end
 
     context 'invalid attributes' do
-      before { put :update, params: { id: question, question: { title: 'new title', body: nil } } }
+      before { put :update, params: { id: question, question: { title: 'new title', body: nil }, format: :js } }
 
       it 'does not update the question' do
         old_title = question.title
@@ -130,8 +112,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to eq 'MyText'
       end
 
-      it 're-renders edit view' do
-        expect(response).to render_template :edit
+      it 'redirects to the updated question' do
+        put :update, params: { id: question, question: attributes_for(:question), format: :js }
+        expect(response).to render_template :update
       end
     end
   end
