@@ -2,10 +2,11 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let!(:question) { create(:question) }
-  let!(:answer) { create(:answer) }
+  let(:user) { create(:user) }
+  let!(:answer) { create(:answer, question: question, user: user) }
 
   describe 'POST #create' do
-    sign_in_user
+    before { sign_in(user) }
 
     context 'valid attributes' do
       it 'saves new answer in the database' do
@@ -14,7 +15,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'belongs to signed in user' do
         post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js }
-        expect(question.answers.last.user_id).to eq @user.id
+        expect(question.answers.last.user_id).to eq user.id
       end
 
       it 're-renders create view' do
@@ -33,6 +34,34 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to render_template :create
       end
     end
+  end
+
+  describe 'PUT #update' do
+    before do
+      sign_in(answer.user)
+    end
+
+    it 'assings the requested answer to @answer' do
+      put :update, params: { id: answer, question_id: question, answer: attributes_for(:answer), format: :js  }
+      expect(assigns(:answer)).to eq answer
+    end
+
+    it 'changes question attributes' do
+      put :update, params: { id: answer, question_id: question, answer: { body: 'new body' }, format: :js }
+      answer.reload
+      expect(answer.body).to eq 'new body'
+    end
+
+    it 'assigns the question' do
+      put :update, params: { id: answer, question_id: question, answer: { body: 'new body' }, format: :js }
+      expect(assigns(:question)).to eq question
+    end
+
+    it 'redirects to the updated question' do
+      put :update, params: { id: answer, question_id: question, answer: attributes_for(:answer), format: :js }
+      expect(response).to render_template :update
+    end
+
   end
 
   describe 'DELETE #destroy' do
