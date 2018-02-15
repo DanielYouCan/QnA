@@ -96,4 +96,43 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #choose_best' do
+    let!(:new_user) { create(:user) }
+    let!(:new_answer) { create(:answer, question: question, user: new_user) }
+
+    before { sign_in(question.user) }
+
+    context 'User chooses best answer' do
+      it 'adds answer as best' do
+        expect { patch :choose_best, params: { id: new_answer, format: :js } }.to change(question.answers.best, :count).by(1)
+      end
+
+      it 'renders question show' do
+        patch :choose_best, params: { id: new_answer, format: :js }
+        expect(response).to render_template :choose_best
+      end
+    end
+
+    context 'User sets another answer as best' do
+      let(:author) { create(:user) }
+      let(:old_answer) { create(:answer, question: question, user: author, best: true) }
+      let(:another_answer) { create(:answer, question: question, user: author) }
+
+      it 'set another answer as best' do
+        expect { patch :choose_best, params: { id: another_answer, format: :js } }.to_not change(question.answers.best, :count)
+      end
+
+      it 'changes old best answer to not best' do
+        patch :choose_best, params: { id: another_answer, format: :js }
+        expect(old_answer.best).to eq false
+        expect(another_answer.best).to eq true
+      end
+
+      it 'renders question show' do
+        patch :choose_best, params: { id: new_answer, format: :js }
+        expect(response).to render_template :choose_best
+      end
+    end
+  end
 end

@@ -1,6 +1,12 @@
 - if answer.persisted?
   div class='answer_#{answer.id}'
-    p= answer.body
+    = answer.body
+    br
+    - if answer.is_best?
+      = octicon 'check', height: 32, class: 'text-success'
+      br
+    - if show_choose_best?(current_user, answer)
+      = link_to 'Choose best', choose_best_answer_path(answer), method: :patch, class: 'best-answer-link', data: { answer_id: answer.id }, remote: true
     - if current_user&.author_of?(answer)
       p
         = link_to 'Delete answer', answer_path(answer), class: 'delete-answer-link', method: :delete, remote: true, data: { confirm: 'Are you sure?' }
