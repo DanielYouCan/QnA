@@ -12,4 +12,19 @@ RSpec.describe Question, type: :model do
     it { should validate_length_of(:body).is_at_least(5) }
     it { should validate_length_of(:title).is_at_least(5) }
   end
+
+  describe '#has_best_answer?' do
+    let(:user) { create(:user) }
+    let!(:question) { create(:question) }
+    let!(:answer) { create(:answer, question: question, best: true) }
+    let!(:another_question) { create(:question) }
+
+    it 'should return true if question has only one best answer' do
+      expect(question).to be_has_best_answer
+    end
+
+    it "should return false if question hasn't only one best answer" do
+      expect(another_question).to_not be_has_best_answer
+    end
+  end
 end

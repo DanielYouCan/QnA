@@ -6,11 +6,11 @@ class Answer < ApplicationRecord
   default_scope { order(best: :desc, created_at: :asc) }
   scope :best, -> { where(best: true) }
 
-  def is_best?
+  def best?
     best == true
   end
 
-  def is_not_best?
-    !is_best?
+  def not_best?
+    !best?
   end
 end

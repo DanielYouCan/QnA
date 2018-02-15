@@ -2,7 +2,7 @@
   div class='answer_#{answer.id}'
     = answer.body
     br
-    - if answer.is_best?
+    - if answer.best?
       = octicon 'check', height: 32, class: 'text-success'
       br
     - if show_choose_best?(current_user, answer)
