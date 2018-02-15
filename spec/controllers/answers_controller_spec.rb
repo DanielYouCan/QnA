@@ -115,18 +115,16 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'User sets another answer as best' do
-      let(:author) { create(:user) }
-      let(:old_answer) { create(:answer, question: question, user: author, best: true) }
-      let(:another_answer) { create(:answer, question: question, user: author) }
+      let!(:another_answer) { create(:answer, question: question, user: new_user, best: true) }
 
       it 'set another answer as best' do
-        expect { patch :choose_best, params: { id: another_answer, format: :js } }.to_not change(question.answers.best, :count)
+        expect { patch :choose_best, params: { id: new_answer, format: :js } }.to_not change(question.answers.best, :count)
       end
 
       it 'changes old best answer to not best' do
-        patch :choose_best, params: { id: another_answer, format: :js }
-        expect(old_answer.best).to eq false
-        expect(another_answer.best).to eq true
+        patch :choose_best, params: { id: new_answer, format: :js }
+        expect(another_answer.reload.best).to eq false
+        expect(new_answer.reload.best).to eq true
       end
 
       it 'renders question show' do
