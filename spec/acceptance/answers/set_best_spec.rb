@@ -1,9 +1,9 @@
 require_relative  '../acceptance_helper'
 
-feature 'Author chooses best answer', %q{
+feature 'Author sets best answer', %q{
   In order to appreciate helpful answers
   As an author
-  I want to be able to choose best answer
+  I want to be able to set best answer
 } do
 
    given!(:user) { create(:user) }
@@ -11,17 +11,17 @@ feature 'Author chooses best answer', %q{
    given!(:another_user) { create(:user) }
    given!(:answer) { create(:answer, question: question, user: another_user ) }
 
-   scenario 'Guest tries to choose best answer' do
+   scenario 'Guest tries to set best answer' do
      visit question_path(question)
 
-     expect(page).to_not have_link 'Choose best'
+     expect(page).to_not have_link 'Set best'
    end
 
    scenario 'Non-author tries to choose best answer' do
      sign_in(another_user)
      visit question_path(question)
 
-     expect(page).to_not have_link 'Choose best'
+     expect(page).to_not have_link 'Set best'
    end
 
    describe 'Author of the question' do
@@ -32,15 +32,15 @@ feature 'Author chooses best answer', %q{
 
      scenario 'Sees choose best link' do
        within '.answers' do
-         expect(page).to have_link 'Choose best'
+         expect(page).to have_link 'Set best'
        end
      end
 
-     scenario 'Chooses answer as best', js: true do
-       click_on 'Choose best'
+     scenario 'Sets answer as best', js: true do
+       click_on 'Set best'
 
        within '.answers' do
-         expect(page).to_not have_link 'Choose best'
+         expect(page).to_not have_link 'Set best'
          expect(page).to have_css('svg.octicon-check', count: 1)
        end
      end

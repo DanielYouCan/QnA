@@ -11,18 +11,19 @@ RSpec.describe Answer, type: :model do
     it { should validate_length_of(:body).is_at_least(5) }
   end
 
-  describe '#is_best?' do
-    let!(:user) { create(:user) }
+  describe '#set_best' do
     let!(:question) { create(:question) }
-    let!(:answer) { create(:answer, best: true) }
-    let!(:another_answer) { create(:answer) }
+    let!(:answer) { create(:answer, question: question) }
+    let!(:previous_best_answer) { create(:answer, question: question, best: true) }
 
-    it 'should return true if answer is best' do
-      expect(answer).to be_best
+    it 'should set new answer as best' do
+       answer.set_best!
+       expect(answer.reload).to be_best
     end
 
-    it 'should return false if answer is not best' do
-      expect(another_answer).to be_not_best
+    it 'should set previous best answer as not best' do
+      answer.set_best!
+      expect(previous_best_answer.reload).to_not be_best
     end
   end
 end

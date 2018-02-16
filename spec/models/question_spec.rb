@@ -27,4 +27,19 @@ RSpec.describe Question, type: :model do
       expect(another_question).to_not be_has_best_answer
     end
   end
+
+  describe '#best_answer' do
+    let!(:question) { create(:question) }
+    let!(:answer) { create(:answer, question: question, best: true) }
+    let!(:another_question) { create(:question) }
+    let!(:another_answer) { create(:answer, question: another_question) }
+
+    it 'should return answer if question has best answer' do
+      expect(question.best_answer).to eq(answer)
+    end
+
+    it "should return nil if question doesn't have best answer" do
+      expect(another_question.best_answer).to eq(nil)
+    end
+  end
 end

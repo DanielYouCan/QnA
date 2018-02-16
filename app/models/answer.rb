@@ -6,11 +6,10 @@ class Answer < ApplicationRecord
   default_scope { order(best: :desc, created_at: :asc) }
   scope :best, -> { where(best: true) }
 
-  def best?
-    best == true
-  end
-
-  def not_best?
-    !best?
+  def set_best!
+    Answer.transaction do
+      question.best_answer.update(best: false) if question.has_best_answer?
+      self.update(best: true)
+    end
   end
 end

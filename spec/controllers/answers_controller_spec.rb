@@ -97,7 +97,7 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'PATCH #choose_best' do
+  describe 'PATCH #set_best' do
     let!(:new_user) { create(:user) }
     let!(:new_answer) { create(:answer, question: question, user: new_user) }
 
@@ -105,12 +105,12 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'User chooses best answer' do
       it 'adds answer as best' do
-        expect { patch :choose_best, params: { id: new_answer, format: :js } }.to change(question.answers.best, :count).by(1)
+        expect { patch :set_best, params: { id: new_answer, format: :js } }.to change(question.answers.best, :count).by(1)
       end
 
       it 'renders question show' do
-        patch :choose_best, params: { id: new_answer, format: :js }
-        expect(response).to render_template :choose_best
+        patch :set_best, params: { id: new_answer, format: :js }
+        expect(response).to render_template :set_best
       end
     end
 
@@ -118,18 +118,18 @@ RSpec.describe AnswersController, type: :controller do
       let!(:another_answer) { create(:answer, question: question, user: new_user, best: true) }
 
       it 'set another answer as best' do
-        expect { patch :choose_best, params: { id: new_answer, format: :js } }.to_not change(question.answers.best, :count)
+        expect { patch :set_best, params: { id: new_answer, format: :js } }.to_not change(question.answers.best, :count)
       end
 
       it 'changes old best answer to not best' do
-        patch :choose_best, params: { id: new_answer, format: :js }
+        patch :set_best, params: { id: new_answer, format: :js }
         expect(another_answer.reload.best).to eq false
         expect(new_answer.reload.best).to eq true
       end
 
       it 'renders question show' do
-        patch :choose_best, params: { id: new_answer, format: :js }
-        expect(response).to render_template :choose_best
+        patch :set_best, params: { id: new_answer, format: :js }
+        expect(response).to render_template :set_best
       end
     end
   end

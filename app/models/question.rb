@@ -5,6 +5,10 @@ class Question < ApplicationRecord
   validates :body, :title, presence: true, length: { minimum: 5 }
 
   def has_best_answer?
-    answers.best.length == 1
+    answers.best.exists?
+  end
+
+  def best_answer
+    answers.best.first
   end
 end
