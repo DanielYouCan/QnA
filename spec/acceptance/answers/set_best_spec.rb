@@ -9,6 +9,8 @@ feature 'Author sets best answer', %q{
    given!(:user) { create(:user) }
    given!(:question) { create(:question) }
    given!(:another_user) { create(:user) }
+   given!(:first_answer) { create(:answer, question: question, user: another_user ) }
+   given!(:previous_best_answer) { create(:answer, question: question, user: another_user, best: true ) }
    given!(:answer) { create(:answer, question: question, user: another_user ) }
 
    scenario 'Guest tries to set best answer' do
@@ -31,19 +33,34 @@ feature 'Author sets best answer', %q{
      end
 
      scenario 'Sees choose best link' do
-       within '.answers' do
+       within ".answer_#{answer.id}" do
          expect(page).to have_link 'Set best'
        end
      end
 
-     scenario 'Sets answer as best', js: true do
-       click_on 'Set best'
-
-       within '.answers' do
+     scenario 'Sets answer as best and displays first', js: true do
+       within ".answer_#{answer.reload.id}" do
+         click_on 'Set best'
          expect(page).to_not have_link 'Set best'
          expect(page).to have_css('svg.octicon-check', count: 1)
        end
+
+       within ".answers" do
+         expect(answer.body).to appear_before(first_answer.body)
+       end
      end
 
+     scenario 'Sets new answer as best', js: true do
+       within ".answer_#{answer.reload.id}" do
+         click_on 'Set best'
+         expect(page).to_not have_link 'Set best'
+         expect(page).to have_css('svg.octicon-check', count: 1)
+       end
+
+       within ".answer_#{previous_best_answer.reload.id}" do
+         expect(page).to have_link 'Set best'
+         expect(page).to_not have_css('svg.octicon-check', count: 1)
+       end
+     end
    end
 end

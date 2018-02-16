@@ -8,8 +8,8 @@ class Answer < ApplicationRecord
 
   def set_best!
     Answer.transaction do
-      question.best_answer.update(best: false) if question.has_best_answer?
-      self.update(best: true)
+      question.best_answer.update!(best: false) if question.has_best_answer?
+      self.update!(best: true)
     end
   end
 end

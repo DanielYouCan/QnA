@@ -53,11 +53,12 @@ feature 'Edit question', %q{
     scenario 'Invalid attributes', js: true do
       click_on 'Edit'
       within '.question' do
+        fill_in 'Title', with: ''
         click_on 'Update question'
 
         expect(page).to have_content question.title
         expect(page).to have_content question.body
-        expect(page).to have_selector 'textarea'
+        expect(page).to have_content "Title can't be blank"
       end
     end
   end

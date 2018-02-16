@@ -53,10 +53,11 @@ feature 'Answer editing', %q{
     scenario 'invalid attributes for answer', js: true do
       click_on 'Edit'
       within '.answers' do
+        fill_in 'Answer', with: ''
         click_on 'Update Answer'
 
         expect(page).to have_content answer.body
-        expect(page).to have_selector 'textarea'
+        expect(page).to have_content "Body can't be blank"
       end
     end
 
