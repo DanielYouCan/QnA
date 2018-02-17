@@ -1,0 +1,85 @@
+﻿@{
+    Layout = "~/Views/Shared/_User_Layout.cshtml";
+}
+
+<div id="tableBlock" class="mt-2"></div>
+<a href="http://localhost:11821/Home/NewOrder" class="btn btn-dark mt-2" role="button" aria-pressed="true">Новый заказ</a>
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var nav = document.getElementsByClassName('navbar-nav');
+            var token = window.localStorage.getItem('tokenKey');
+            if (!token) {
+                nav.html = "<li class='nav-item'><a href='http://localhost:11821'>Главная</a></li>";
+                window.location.href = "http://localhost:11821";
+            } else {
+                GetAllOrders();
+            }
+
+        });
+
+        // Получение всех книг по ajax-запросу
+        function GetAllOrders() {
+
+            $.ajax({
+                url: 'http://localhost:11821/api/client/MyOrders',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    WriteResponse(data);
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                },
+                beforeSend: function (xhr) {
+                    var token = window.localStorage.getItem('tokenKey');
+                    xhr.setRequestHeader("Authorization", "Bearer " + token);
+                }
+            });
+        }
+
+        // вывод полученных данных на экран
+        function WriteResponse(orders) {
+            var strResult = "<table class='table table-striped table-bordered'><thead class='thead-dark' align='center'><th>Дата</th><th>Выехал из</th><th>Приехал в</th><th>Цена</th><th>Статус</th></thead>";
+            $.each(orders, function (index, order) {
+                var date = order.OrderDate.slice(0, 10) + " " + order.OrderDate.slice(11, 19);
+                var status;
+                if (order.Status == "Активный") {
+                    status = "<a id='delItem' data-item='" + order.Id + "' class='btn btn-danger' role='button' aria-pressed='true' onclick='CancelItem(this);' >Отменить</a>";
+                }
+                else {
+                    status = order.Status;
+                }
+                strResult += "<tr align='center'><td>" + date + "</td><td> " + order.Address1 + "</td><td>" +
+                    order.Address2 + "</td><td>" + order.Price + "</td><td>" + status + "</td></tr>";
+            });
+            strResult += "</table>";
+            $("#tableBlock").html(strResult);
+
+        }
+        function CancelItem(el) {
+            // получаем id удаляемого объекта
+            var id = $(el).attr('data-item');
+            CancelOrder(id);
+        }
+        function CancelOrder(id) {
+            $.ajax({
+                url: 'http://localhost:11821/api/client/CancelOrder?id=' + id,
+                type: 'DELETE',
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    GetAllOrders();
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                },
+                beforeSend: function (xhr) {
+                    var token = window.localStorage.getItem('tokenKey');
+                    xhr.setRequestHeader("Authorization", "Bearer " + token);
+                }
+            });
+        }
+    </script>
+}

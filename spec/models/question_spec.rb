@@ -14,6 +14,10 @@ RSpec.describe Question, type: :model do
     it { should validate_length_of(:title).is_at_least(5) }
   end
 
+  context 'nested attributes' do
+    it { should accept_nested_attributes_for :attachments }
+  end
+
   describe '#has_best_answer?' do
     let(:user) { create(:user) }
     let!(:question) { create(:question) }
