@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'User adds answer to question', %q{
   In order to help other users to solve their issue
@@ -14,7 +14,7 @@ feature 'User adds answer to question', %q{
 
     visit question_path(question)
 
-    fill_in 'Body', with: 'My unique answer'
+    fill_in 'answer[body]', with: 'My unique answer'
     click_on 'Answer'
 
     within '.answers' do
@@ -33,7 +33,7 @@ feature 'User adds answer to question', %q{
     sign_in(user)
     visit question_path(question)
 
-    fill_in 'Body', with: 'Abc'
+    fill_in 'answer[body]', with: 'Abc'
     click_on 'Answer'
 
     expect(page).to have_content 'Body is too short'

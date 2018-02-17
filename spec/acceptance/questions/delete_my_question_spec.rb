@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'User deletes his question', %q{
   In order to remove the question from the site

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'User deletes his/her answer', %q{
   In order to remove my answer
@@ -11,13 +11,12 @@ feature 'User deletes his/her answer', %q{
   given!(:answer) { create(:answer, user: user, question: question) }
   given!(:another_user) { create(:user) }
 
-  scenario 'User is the author of the answer' do
+  scenario 'User is the author of the answer', js: true do
     sign_in(user)
 
     visit question_path(question)
 
     click_on 'Delete answer'
-    expect(page).to have_content 'Your answer was successfully deleted.'
     expect(page).to_not have_content answer.body
   end
 
