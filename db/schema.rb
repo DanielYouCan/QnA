@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20180217081549) do
     t.string "file"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "attachable_id"
+    t.integer "attachable_id"
     t.string "attachable_type"
     t.index ["attachable_id", "attachable_type"], name: "index_attachments_on_attachable_id_and_attachable_type"
   end
@@ -63,6 +63,5 @@ ActiveRecord::Schema.define(version: 20180217081549) do
 
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
-  add_foreign_key "attachments", "questions", column: "attachable_id"
   add_foreign_key "questions", "users"
 end

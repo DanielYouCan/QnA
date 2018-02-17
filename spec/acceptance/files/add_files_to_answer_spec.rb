@@ -14,7 +14,7 @@ feature 'Adds file to answer', %q{
     visit question_path(question)
   end
 
-  scenario 'User adds file to an answer' do
+  scenario 'User adds file to an answer', js: true do
     fill_in 'answer[body]', with: 'My unique answer'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
     click_on 'Answer'
@@ -23,5 +23,5 @@ feature 'Adds file to answer', %q{
       expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
     end
   end
-  
+
 end

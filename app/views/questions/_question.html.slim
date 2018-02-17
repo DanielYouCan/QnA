@@ -3,14 +3,16 @@
     h1= @question.title
     br
     = @question.body
-    p Attachments:
-    ul
-      - @question.attachments.each do |a|
-        li= link_to a.file.identifier, a.file.url
-
+    br
+    - if @question.attachments.present?
+      p Attachments:
+      ul
+        - @question.attachments.each do |a|
+          li= link_to a.file.identifier, a.file.url
+      br
     - if current_user&.author_of?(@question)
       = link_to 'Delete question', question_path(@question), method: :delete
-      br
+      |    |
       = link_to 'Edit question', '', class: 'edit-question-link', remote: true
       .question-update-errors
       = render 'edit_form'
