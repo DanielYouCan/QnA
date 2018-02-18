@@ -2,10 +2,10 @@
   div class='answer_#{answer.id}'
     = answer.body
     - if answer.attachments.present?
-      p Attachments:
-      ul
-        - answer.attachments.each do |a|
-          li= link_to a.file.identifier, a.file.url
+      div class="attachments_answer_#{answer.id}"
+        b Attachments:
+        ul
+          = render answer.attachments
     - else
         br
     - if answer.best?
@@ -24,5 +24,11 @@
           br
           = f.text_area :body, id: :answer_body
           br
+          b Attachments:
+          .attachments
+            = f.fields_for :attachments do |attachment|
+              = render 'attachment_fields', f: attachment
+          .links
+            = render 'shared/link_attachments', f: f
           = f.submit
           end

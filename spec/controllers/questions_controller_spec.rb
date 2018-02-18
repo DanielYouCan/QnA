@@ -90,7 +90,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PUT #update' do
-    sign_in_user
+    before { sign_in(question.user) }
 
     context 'valid attributes' do
       it 'assings the requested question to @question' do

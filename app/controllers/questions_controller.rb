@@ -28,7 +28,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params)
+    @question.update(question_params) if current_user.author_of?(@question)
   end
 
   def destroy
@@ -48,6 +48,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, attachments_attributes: [:file])
+    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :destroy])
   end
 end
