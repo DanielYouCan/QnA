@@ -1,0 +1,5 @@
+.nested-fields
+  = f.label :file
+  br
+  = f.file_field :file
+  = link_to_remove_association (octicon 'dash', height: 32, class: 'text-danger'), f

@@ -1,6 +1,13 @@
-= form_with model: [@question, @question.answers.build], remote: true do |f|
+= form_with model: [@question, @answer], remote: true do |f|
   p
     = f.label :body
     br
     = f.text_area :body, id: :create_answer_body, rows: 6, cols: 50
+    br
+    b Attachments:
+    div class="attachments_add_answer"
+      = f.fields_for :attachments do |attachment|
+        = render 'attachment_fields', f: attachment
+    .links
+      = link_to_add_association (octicon 'plus', height: 32, class: 'text-success'), f, :attachments, data: { association_insertion_node: '.attachments_add_answer', association_insertion_method: :append }
   p= f.submit 'Answer'

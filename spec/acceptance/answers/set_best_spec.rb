@@ -39,7 +39,7 @@ feature 'Author sets best answer', %q{
      end
 
      scenario 'Sets answer as best and displays first', js: true do
-       within ".answer_#{answer.reload.id}" do
+       within ".answer_#{answer.id}" do
          click_on 'Set best'
          expect(page).to_not have_link 'Set best'
          expect(page).to have_css('svg.octicon-check', count: 1)
@@ -51,13 +51,13 @@ feature 'Author sets best answer', %q{
      end
 
      scenario 'Sets new answer as best', js: true do
-       within ".answer_#{answer.reload.id}" do
+       within ".answer_#{answer.id}" do
          click_on 'Set best'
          expect(page).to_not have_link 'Set best'
          expect(page).to have_css('svg.octicon-check', count: 1)
        end
 
-       within ".answer_#{previous_best_answer.reload.id}" do
+       within ".answer_#{previous_best_answer.id}" do
          expect(page).to have_link 'Set best'
          expect(page).to_not have_css('svg.octicon-check', count: 1)
        end

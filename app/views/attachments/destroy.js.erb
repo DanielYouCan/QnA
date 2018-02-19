@@ -1,0 +1,3 @@
+<% type = @resource.is_a?(Question) ?  '.attachments_question' :  ".attachments_answer_#{@resource.id}" %>
+
+$('<%= type %>').html("<%= j render @resource.attachments %>");

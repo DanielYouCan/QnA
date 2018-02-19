@@ -4,9 +4,15 @@
     br
     = @question.body
     br
+    - if @question.attachments.present?
+      .attachments_question
+        b Attachments:
+        ul
+          = render @question.attachments
+
     - if current_user&.author_of?(@question)
       = link_to 'Delete question', question_path(@question), method: :delete
-      br
+      |    |
       = link_to 'Edit question', '', class: 'edit-question-link', remote: true
       .question-update-errors
       = render 'edit_form'
