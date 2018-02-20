@@ -11,5 +11,13 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :votable do
+    member do
+      patch :rating_up
+      patch :rating_down
+    end
+  end
+
   resources :attachments, only: :destroy
+  resources :questions, :answers, concerns: [:votable]
 end

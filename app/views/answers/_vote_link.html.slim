@@ -1,0 +1,5 @@
+- if current_user && !current_user.author_of?(answer)
+  .vote
+    = link_to (octicon 'thumbsup', height: 20, class: 'text-notice'), rating_up_answer_path(answer), method: :patch, remote: true
+    |  |
+    = link_to (octicon 'thumbsdown', height: 20, class: 'text-danger'), rating_down_answer_path(answer), method: :patch, remote: true

@@ -1,6 +1,9 @@
 - if answer.persisted?
   div class='answer_#{answer.id}'
     = answer.body
+    div class="answer_#{answer.id}_rating"
+      = answer.rating
+    = render 'answers/vote_link', answer: answer
     - if answer.attachments.present?
       div class="attachments_answer_#{answer.id}"
         b Attachments:
