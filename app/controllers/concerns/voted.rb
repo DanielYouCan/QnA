@@ -2,7 +2,7 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_votable, only: %i[rating_up rating_down]
+    before_action :set_votable, only: %i[rating_up rating_down cancel_vote]
   end
 
   def rating_up
@@ -10,7 +10,7 @@ module Voted
       if @votable.rating_up!(current_user)
         format.json { render json: @votable }
       else
-        format.json { render json: "You have already voted!", status: :forbidden }
+        format.json { render json: @votable.id, status: :forbidden }
       end
     end
   end
@@ -20,7 +20,17 @@ module Voted
       if @votable.rating_down!(current_user)
         format.json { render json: @votable }
       else
-        format.json { render json: "You can't vote", status: :forbidden }
+        format.json { render json: @votable.id, status: :forbidden }
+      end
+    end
+  end
+
+  def cancel_vote
+    respond_to do |format|
+      if @votable.cancel_vote!(current_user)
+        format.json { render json: @votable }
+      else
+        format.json { render json: @votable.id, status: :forbidden }
       end
     end
   end

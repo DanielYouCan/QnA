@@ -50,7 +50,7 @@ feature 'Non-author user votes for answer', %q{
       find('.octicon-thumbsup').click
     end
 
-    within '.vote_error' do
+    within ".vote_error_#{answer.id}" do
       expect(page).to have_content 'You have already voted!'
     end
   end

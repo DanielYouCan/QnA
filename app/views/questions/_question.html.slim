@@ -1,9 +1,14 @@
 - if @question.persisted?
-  div class='question'
+  .question
     h1= @question.title
     br
     = @question.body
-    br
+    |   |
+    i= "Author: #{@question.user.email}"
+    div class="question_rating rating"
+      = @question.rating
+    - if current_user && !current_user.author_of?(@question)
+      = render 'vote_link', question: @question
     - if @question.attachments.present?
       .attachments_question
         b Attachments:

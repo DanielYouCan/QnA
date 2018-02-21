@@ -15,3 +15,19 @@
 .attachment {
   display: flex;
 }
+
+.answer {
+  padding-left: 15px;
+  margin-top: 5px;
+  padding-bottom: 5px;
+  width: 40%;
+  border: 1px solid $indigo;
+  border-radius: 10px;
+}
+
+.rating {
+  padding-left: 10px;
+  width: 35px;
+  border: 2px solid red;
+  border-radius: 20px;
+}

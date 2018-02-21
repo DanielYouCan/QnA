@@ -24,14 +24,15 @@ module Votable
     end
   end
 
-  def cancel_vote(user)
-    vote = votes.where(user: user)
-    return false unless vote.value
+  def cancel_vote!(user)
+    return false if votes.where(user: user).empty?
+    vote = votes.where(user: user).first
 
     self.transaction do
-      vote.delete!
       self.rating -= 1 if vote.value == 1
       self.rating += 1 if vote.value == -1
+      self.save!
+      vote.destroy!
     end
   end
 

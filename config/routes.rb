@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     member do
       patch :rating_up
       patch :rating_down
+      patch :cancel_vote
     end
   end
 
