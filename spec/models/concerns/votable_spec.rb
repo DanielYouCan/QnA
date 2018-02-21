@@ -4,7 +4,7 @@ shared_examples_for "votable" do
   it { should have_many :votes }
 
   let(:model) { described_class }
-  let!(:votable) { create(model.to_s.underscore.to_sym) }
+  let(:votable) { create(model.to_s.underscore.to_sym) }
   let!(:user) { create(:user) }
 
   describe "#rating_up!" do
