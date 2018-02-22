@@ -1,13 +1,17 @@
 - if answer.persisted?
-  div class='answer_#{answer.id}'
-    = answer.body
+  div class='answer_#{answer.id} answer'
+    b= answer.body
+    |   | 
+    i= "Author: #{user_name(answer)}"
+    div class="answer_#{answer.id}_rating rating"
+      = answer.rating
+    - if current_user && !current_user.author_of?(answer)
+      = render 'answers/vote_link', answer: answer
     - if answer.attachments.present?
       div class="attachments_answer_#{answer.id}"
         b Attachments:
         ul
           = render answer.attachments
-    - else
-        br
     - if answer.best?
       = octicon 'check', height: 32, class: 'text-success'
     - if show_set_best?(current_user, answer)

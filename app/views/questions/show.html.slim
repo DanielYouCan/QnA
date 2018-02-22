@@ -1,9 +1,9 @@
 = render 'question'
-p
-  b Answers:
-  .answers
-    = render @question.answers
-
+br
+b Answers:
+.answers
+  = render @question.answers
+br
 - if user_signed_in?
   .answers-errors
   = render 'answers/form'

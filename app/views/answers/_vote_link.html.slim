@@ -1,0 +1,7 @@
+.vote
+  = link_to (octicon 'thumbsup', height: 20, class: 'text-notice'), rating_up_answer_path(answer), method: :patch, remote: true
+  |  |
+  = link_to (octicon 'thumbsdown', height: 20, class: 'text-danger'), rating_down_answer_path(answer), method: :patch, remote: true
+.cancel_vote
+  = link_to 'Cancel vote', cancel_vote_answer_path(answer), method: :patch, remote: true
+div class="vote_error_#{answer.id}"
