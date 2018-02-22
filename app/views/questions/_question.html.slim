@@ -3,8 +3,8 @@
     h1= @question.title
     br
     = @question.body
-    |   |
-    i= "Author: #{@question.user.email}"
+    |   | 
+    i= "Author: #{user_name(@question)}"
     div class="question_rating rating"
       = @question.rating
     - if current_user && !current_user.author_of?(@question)

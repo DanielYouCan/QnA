@@ -6,4 +6,8 @@ module ApplicationHelper
   def flash_class(key)
     FLASH_CLASS[key]
   end
+
+  def user_name(resource)
+    resource.user.email.split('@')[0]
+  end
 end

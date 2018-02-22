@@ -2,7 +2,7 @@
   div class='answer_#{answer.id} answer'
     b= answer.body
     |   | 
-    i= "Author: #{answer.user.email}"
+    i= "Author: #{user_name(answer)}"
     div class="answer_#{answer.id}_rating rating"
       = answer.rating
     - if current_user && !current_user.author_of?(answer)
