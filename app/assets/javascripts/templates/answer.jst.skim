@@ -1,0 +1,26 @@
+head
+  link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+- if gon.user_id != @answer.user_id
+  div class='answer_#{@answer.id} answer'
+    b= @answer.body
+    |   |
+    i= "Author: #{@answer.user.email.split('@')[0]}"
+    div class="answer_#{@answer.id}_rating rating"
+      = @answer.rating
+    - if gon.user_id
+      .vote
+        a data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{@answer.id}/rating_up"
+          i class="fa fa-thumbs-up" style="font-size: 20px; color:blue;"
+        |   |
+        a data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{@answer.id}/rating_down"
+          i class="fa fa-thumbs-down" style="font-size: 20px; color:red;"
+      .cancel_vote
+        a data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{@answer.id}/cancel_vote" Cancel vote
+      div class="vote_error_#{@answer.id}"
+    - if gon.question_author_id == gon.user_id
+      a class="best-answer-link" data-answer-id="#{@answer.id}" data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{@answer.id}/set_best" Set best
+    - if @answer.attachments.length
+      div class="attachments_answer_#{@answer.id}"
+        b Attachments:
+        - for n in [0...@answer.attachments.length]
+          li: a href="#{@answer.attachments[n].file.url}" =@answer.attachments[n].file.url.split('/').pop()

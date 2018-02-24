@@ -41,6 +41,8 @@ gem 'octicons_helper'
 gem 'carrierwave'
 gem 'remotipart', '~> 1.3'
 gem 'cocoon'
+gem 'gon'
+gem 'skim'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -16,6 +16,7 @@
 //= require jquery.remotipart
 //= require action_cable
 //= require turbolinks
+//= require skim
 //= require_tree .
 
 var App = App || {}

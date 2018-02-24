@@ -23,7 +23,7 @@ $ ->
       @perform 'follow'
     ,
     received: (data) ->
-      $('.questions_list').append data
+      $('.questions_list').prepend data
     })
 
 $(document).ready(vote_question)

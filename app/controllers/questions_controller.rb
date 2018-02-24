@@ -10,6 +10,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    gon.question_author_id = @question.user_id
     @answer = @question.answers.build
     @answer.attachments.build
   end
