@@ -1,5 +1,3 @@
-head
-  link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
 - if gon.user_id != @answer.user_id
   div class='answer_#{@answer.id} answer'
     b= @answer.body
@@ -10,10 +8,16 @@ head
     - if gon.user_id
       .vote
         a data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{@answer.id}/rating_up"
-          i class="fa fa-thumbs-up" style="font-size: 20px; color:blue;"
+          svg height="20" class="octicon octicon-thumbsup text-notice" viewBox="0 0 16 16" version="1.1" width="20" aria-hidden="true"
+            path fill-rule="evenodd" d="M14 14c-.05.69-1.27 1-2 1H5.67L4 14V8c1.36 0 2.11-.75 3.13-1.88 1.23-1.36 1.14-2.56.88-4.13-.08-.5.5-1 1-1 .83 0 2 2.73 2 4l-.02
+            1.03c0 .69.33.97 1.02.97h2c.63 0 .98.36 1 1l-1 6L14 14zm0-8h-2.02l.02-.98C12 3.72 10.83 0 9 0c-.58 0-1.17.3-1.56.77-.36.41-.5.91-.42 1.41.25 1.48.28 2.28-.63 3.28-1 1.09-1.48
+            1.55-2.39 1.55H2C.94 7 0 7.94 0 9v4c0 1.06.94 2 2 2h1.72l1.44.86c.16.09.33.14.52.14h6.33c1.13 0 2.84-.5 3-1.88l.98-5.95c.02-.08.02-.14.02-.2-.03-1.17-.84-1.97-2-1.97H14z"
         |   |
         a data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{@answer.id}/rating_down"
-          i class="fa fa-thumbs-down" style="font-size: 20px; color:red;"
+          svg height="20" class="octicon octicon-thumbsdown text-danger" viewBox="0 0 16 16" version="1.1" width="20" aria-hidden="true"
+            path fill-rule="evenodd" d="M15.98 7.83l-.97-5.95C14.84.5 13.13 0 12 0H5.69c-.2 0-.38.05-.53.14L3.72 1H2C.94 1 0 1.94 0 3v4c0 1.06.94 2.02 2 2h2c.91 0 1.39.45 2.39 1.55.91
+            1 .88 1.8.63 3.27-.08.5.06 1 .42 1.42.39.47.98.77 1.56.77 1.83 0 3-3.72 3-5.02l-.02-.98h2.04c1.16 0 1.95-.8 1.98-1.97 0-.06.02-.13-.02-.2v-.01zm-1.97 1.19h-1.99c-.7
+            0-1.03.28-1.03.97l.03 1.03c0 1.27-1.17 4-2 4-.5 0-1.08-.5-1-1 .25-1.58.34-2.78-.89-4.14C6.11 8.75 5.36 8 4 8V2l1.67-1H12c.73 0 1.95.31 2 1l.02.02 1 6c-.03.64-.38 1-1 1h-.01z"
       .cancel_vote
         a data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{@answer.id}/cancel_vote" Cancel vote
       div class="vote_error_#{@answer.id}"

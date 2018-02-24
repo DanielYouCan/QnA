@@ -39,4 +39,30 @@ feature 'User adds answer to question', %q{
     expect(page).to have_content 'Body is too short'
   end
 
+  context 'multiple sessions' do
+    scenario "answer appears on another user's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        fill_in 'answer[body]', with: 'My unique answer'
+        click_on 'Answer'
+
+        within '.answers' do
+          expect(page).to have_content 'My unique answer'
+        end
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'My unique answer'
+      end
+    end
+  end
+
 end
