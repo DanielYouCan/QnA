@@ -20,7 +20,9 @@ Rails.application.routes.draw do
   end
 
   resources :attachments, only: :destroy
-  resources :questions, :answers, concerns: [:votable]
+  resources :questions, :answers, concerns: [:votable] do
+    resources :comments, only: %i[create destroy update], shallow: true
+  end
 
   mount ActionCable.server => '/cable'
 end

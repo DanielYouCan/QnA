@@ -3,7 +3,7 @@
     h1= @question.title
     br
     = @question.body
-    |   | 
+    |   |
     i= "Author: #{user_name(@question)}"
     div class="question_rating rating"
       = @question.rating
@@ -21,3 +21,10 @@
       = link_to 'Edit question', '', class: 'edit-question-link'
       .question-update-errors
       = render 'edit_form'
+      - if user_signed_in?
+        = link_to 'Add comment', '', class: 'add-comment-link', data: { resource_id: @question.id, resource_type: "question" }
+        br
+        = render 'comments/form', commentable: @question
+      div class="question_#{@question.id}_comments comments"
+        b Comments:
+        = render @question.comments

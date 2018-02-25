@@ -1,0 +1,6 @@
+<% if @comment&.errors.present? %>
+  $('#comment-errors-<%= @comment.id %>').html("<%= j render 'shared/errors', resource: @comment %>");
+<% else %>
+  $('.<%= @comment.commentable_type.underscore %>_<%= @commentable.id %>_comments').append('<%= j render @comment %>');
+  $('#new_comment_<%= @comment.commentable_type.underscore %>_<%= @commentable.id %>').hide()
+<% end %>

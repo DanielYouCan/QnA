@@ -1,7 +1,7 @@
 - if answer.persisted?
   div class='answer_#{answer.id} answer'
     b= answer.body
-    |   | 
+    |   |
     i= "Author: #{user_name(answer)}"
     div class="answer_#{answer.id}_rating rating"
       = answer.rating
@@ -36,3 +36,10 @@
             = render 'shared/link_attachments', f: f
           = f.submit
           end
+      - if user_signed_in?
+        = link_to 'Add comment', '', class: 'add-comment-link', data: { resource_id: answer.id, resource_type: "answer" }
+        br
+        = render 'comments/form', commentable: answer
+      div class="answer_#{answer.id}_comments comments"
+        b Comments:
+        = render answer.comments

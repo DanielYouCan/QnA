@@ -1,0 +1,6 @@
+= form_for [commentable, commentable.comments.build], html: { id: "new_comment_#{commentable.class.name.underscore}_#{commentable.id}" }, remote: true do |f|
+  p
+    = f.label :body
+    br
+    = f.text_area :body, id: :create_comment_body, rows: 6, cols: 50
+  p= f.submit 'Comment'
