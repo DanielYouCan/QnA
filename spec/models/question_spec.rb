@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Question, type: :model do
+  it_behaves_like "commentable"
   it_behaves_like "votable"
-  
+
   context 'assosiation' do
     it { should have_many(:answers).dependent(:destroy) }
     it { should have_many(:attachments) }
