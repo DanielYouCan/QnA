@@ -40,6 +40,8 @@ feature 'User adds answer to question', %q{
   end
 
   context 'multiple sessions' do
+    given(:another_user) { create(:user) }
+
     scenario "answer appears on another user's page", js: true do
       Capybara.using_session('user') do
         sign_in(user)
@@ -47,6 +49,11 @@ feature 'User adds answer to question', %q{
       end
 
       Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('another_user') do
+        sign_in(another_user)
         visit question_path(question)
       end
 
@@ -60,7 +67,21 @@ feature 'User adds answer to question', %q{
       end
 
       Capybara.using_session('guest') do
-        expect(page).to have_content 'My unique answer'
+        within '.answers' do
+          expect(page).to have_content 'My unique answer'
+          expect(page).to_not have_link 'Cancel vote'
+          expect(page).to_not have_selector('.octicon-thumbsup')
+          expect(page).to_not have_selector('.octicon-thumbsdown')
+        end
+      end
+
+      Capybara.using_session('another_user') do
+        within '.answers' do
+          expect(page).to have_content 'My unique answer'
+          expect(page).to have_link 'Cancel vote'
+          expect(page).to have_selector('.octicon-thumbsup')
+          expect(page).to have_selector('.octicon-thumbsdown')
+        end
       end
     end
   end
