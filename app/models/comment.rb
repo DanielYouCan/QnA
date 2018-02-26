@@ -3,4 +3,6 @@ class Comment < ApplicationRecord
   belongs_to :commentable, polymorphic: true, optional: true
 
   validates :body, presence: true, length: { minimum: 5 }
+
+  default_scope { order(updated_at: :asc)}
 end

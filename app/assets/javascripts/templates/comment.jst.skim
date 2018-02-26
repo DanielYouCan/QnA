@@ -1,0 +1,3 @@
+- if gon.user_id != @comment.user_id
+  div class="comment_#{@comment.id} comment"
+    = @comment.body
