@@ -7,7 +7,7 @@ b Add answer:
     br
     b Attachments:
     div class="attachments_add_answer"
-      = f.fields_for :attachments do |attachment|
+      = f.fields_for :attachments, @answer.attachments.build do |attachment|
         = render 'attachment_fields', f: attachment
     .links
       = link_to_add_association (octicon 'plus', height: 32, class: 'text-success'), f, :attachments, data: { association_insertion_node: '.attachments_add_answer', association_insertion_method: :append }

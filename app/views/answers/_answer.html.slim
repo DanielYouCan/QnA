@@ -31,7 +31,7 @@
           br
           b Attachments:
           .attachments
-            = f.fields_for :attachments do |attachment|
+            = f.fields_for :attachments, answer.attachments.build do |attachment|
               = render 'attachment_fields', f: attachment
           .links
             = render 'shared/link_attachments', f: f

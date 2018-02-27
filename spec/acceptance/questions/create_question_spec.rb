@@ -19,7 +19,7 @@ feature 'User creates question', %q{
 
     expect(page).to have_content 'Test question'
     expect(page).to have_content 'Test body'
-    expect(page).to have_content 'Your question was successfully created.'
+    expect(page).to have_content 'Question was successfully created.'
   end
 
   scenario 'Non-authenticated user tries to create question' do
@@ -37,7 +37,7 @@ feature 'User creates question', %q{
     fill_in 'Title', with: 'Test'
     click_on 'Create'
 
-    expect(page).to have_content 'Invalid attributes for a new question'
+    expect(page).to have_content 'Invalid attributes for a new Question'
     expect(page).to have_content 'Title is too short'
     expect(page).to have_content "Body can't be blank"
   end
