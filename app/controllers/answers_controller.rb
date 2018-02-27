@@ -1,9 +1,9 @@
 class AnswersController < ApplicationController
   include Voted
-  
-  before_action :authenticate_user!
+
   before_action :find_question, only: :create
   before_action :set_answer, only: %i[destroy update set_best]
+  after_action :publish_answer, only: :create
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -33,6 +33,14 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:id])
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+    ActionCable.server.broadcast(
+      "question:#{@answer.question_id}:answers",
+        { answer: @answer.to_json(include: %i[user attachments]) }
+    )
   end
 
   def answer_params

@@ -1,7 +1,7 @@
-= render 'question'
+= render 'question_more'
 br
 b Answers:
-.answers
+div class="answers" data-question-id="#{@question.id}"
   = render @question.answers
 br
 - if user_signed_in?

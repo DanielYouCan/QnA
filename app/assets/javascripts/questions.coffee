@@ -17,6 +17,15 @@ cancel_vote_question = ->
   .bind 'ajax:error', (e) ->
     $('.vote_error_question').html("You haven't voted yet")
 
+$ ->
+  App.cable.subscriptions.create('QuestionsChannel', {
+    connected: ->
+      @perform 'follow'
+    ,
+    received: (data) ->
+      $('.questions_list').prepend data
+    })
+
 $(document).ready(vote_question)
 $(document).ready(cancel_vote_question)
 $(document).on('turbolinks:load', vote_question)

@@ -1,0 +1,9 @@
+var errors_field = $('#comment-errors-<%= @comment.commentable_type.underscore %>-<%= @commentable.id %>')
+
+<% if @comment&.errors.present? %>
+  errors_field.html("<%= j render 'shared/errors', resource: @comment %>");
+<% else %>
+  $('.<%= @comment.commentable_type.underscore %>_<%= @commentable.id %>_comments').append('<%= j render @comment %>');
+  $('#new_comment_<%= @comment.commentable_type.underscore %>_<%= @commentable.id %>').hide()
+  errors_field.hide()
+<% end %>

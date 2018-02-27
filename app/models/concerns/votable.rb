@@ -1,26 +1,26 @@
 module Votable
   extend ActiveSupport::Concern
   included do
-    has_many :votes, as: :votable
+    has_many :votes, as: :votable, dependent: :destroy
   end
 
   def rating_up!(user)
     return false unless votable?(user)
 
-    self.transaction do
-      self.votes.create!(user: user, value: 1)
+    transaction do
+      votes.create!(user: user, value: 1)
       self.rating += 1
-      self.save!
+      save!
     end
   end
 
   def rating_down!(user)
     return false unless votable?(user)
 
-    self.transaction do
-      self.votes.create!(user: user, value: -1)
+    transaction do
+      votes.create!(user: user, value: -1)
       self.rating -= 1
-      self.save!
+      save!
     end
   end
 
@@ -28,10 +28,10 @@ module Votable
     return false if votes.where(user: user).empty?
     vote = votes.where(user: user).first
 
-    self.transaction do
+    transaction do
       self.rating -= 1 if vote.value == 1
       self.rating += 1 if vote.value == -1
-      self.save!
+      save!
       vote.destroy!
     end
   end
@@ -39,6 +39,6 @@ module Votable
   private
 
   def votable?(user)
-    self.votes.where(user: user).blank? && !user.author_of?(self)
+    votes.where(user: user).blank? && !user.author_of?(self)
   end
 end

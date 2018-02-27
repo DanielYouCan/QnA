@@ -19,6 +19,26 @@ cancel_vote = ->
     id = $.parseJSON(e.detail[0])
     $('.vote_error_' + id).html("You haven't voted yet")
 
+$(document).on('turbolinks:load', ->
+  return followQuestion() if App.answers_subscribe
+
+  App.answers_subscribe = App.cable.subscriptions.create('AnswersChannel', {
+    collection: -> $('.answers')
+
+    connected: ->
+      @followQuestion()
+
+    followQuestion: ->
+      questionId = @collection().data('questionId')
+      if questionId
+        App.answers_subscribe.perform 'follow', question_id: questionId
+      else
+        App.answers_subscribe.perform 'unfollow'
+
+    received: (data) ->
+      @collection().append JST["templates/answer"](answer: $.parseJSON(data['answer']))
+    }))
+
 $(document).ready(vote)
 $(document).ready(cancel_vote)
 $(document).on('turbolinks:load', vote)
