@@ -16,7 +16,7 @@ feature 'User deletes his question', %q{
     visit question_path(question)
     click_on 'Delete question'
 
-    expect(page).to have_content 'Your question was successfully deleted'
+    expect(page).to have_content 'Question was successfully deleted'
     expect(current_path).to eq questions_path
     expect(page).to_not have_content question.title
   end
@@ -31,6 +31,6 @@ feature 'User deletes his question', %q{
   scenario 'Guest tries to delete question' do
     visit question_path(question)
 
-    expect(page).to_not have_link'Delete question'
+    expect(page).to_not have_link 'Delete question'
   end
 end

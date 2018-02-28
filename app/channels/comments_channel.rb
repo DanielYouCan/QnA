@@ -1,6 +1,6 @@
 class CommentsChannel < ApplicationCable::Channel
   def follow(data)
-    stream_from "question:#{data['question_id'].to_i}:comments"
+    stream_from "question:#{data['question_id']}:comments"
   end
 
   def unfollow

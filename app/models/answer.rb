@@ -7,6 +7,7 @@ class Answer < ApplicationRecord
   has_many :attachments, as: :attachable, dependent: :destroy
 
   validates :body, presence: true, length: { minimum: 5 }
+  after_create :publish_answer
 
   default_scope { order(best: :desc, created_at: :asc) }
   scope :best, -> { where(best: true) }
@@ -18,5 +19,14 @@ class Answer < ApplicationRecord
       question.best_answer.update!(best: false) if question.has_best_answer?
       self.update!(best: true)
     end
+  end
+
+  private
+
+  def publish_answer
+    ActionCable.server.broadcast(
+      "question:#{question_id}:answers",
+        { answer: self.to_json(include: %i[user attachments]) }
+    )
   end
 end

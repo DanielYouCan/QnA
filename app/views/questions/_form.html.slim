@@ -10,7 +10,7 @@
     = f.text_area :body, id: :question_body, rows: 6, cols: 50
   b Attachments:
   .attachments
-    = f.fields_for :attachments do |attachment|
+    = f.fields_for :attachments, @question.attachments.build do |attachment|
       = render 'attachment_fields', f: attachment
   .links
     = render 'shared/link_attachments', f: f

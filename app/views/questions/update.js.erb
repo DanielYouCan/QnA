@@ -1,5 +1,5 @@
 <% if @question&.errors.present? %>
   $('.question-update-errors').html("<%= j render 'shared/errors', resource: @question %>");
 <% else %>
-  $('.question').html('<%= j render @question %>');
+  $('.question').html('<%= j render 'question_more' %>').removeClass('question');
 <% end %>

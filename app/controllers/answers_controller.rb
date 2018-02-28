@@ -3,21 +3,20 @@ class AnswersController < ApplicationController
 
   before_action :find_question, only: :create
   before_action :set_answer, only: %i[destroy update set_best]
-  after_action :publish_answer, only: :create
+
+  respond_to :js
 
   def create
-    @answer = @question.answers.new(answer_params)
-    @answer.user = current_user
-    @answer.save
+    respond_with(@answer = @question.answers.create(answer_params.merge(user: current_user)))
   end
 
   def update
     @answer.update(answer_params) if current_user.author_of?(@answer)
-    @question = @answer.question
+    respond_with @answer
   end
 
   def destroy
-    @answer.destroy if current_user.author_of?(@answer)
+    respond_with(@answer.destroy) if current_user.author_of?(@answer)
   end
 
   def set_best
@@ -33,17 +32,10 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:id])
-  end
-
-  def publish_answer
-    return if @answer.errors.any?
-    ActionCable.server.broadcast(
-      "question:#{@answer.question_id}:answers",
-        { answer: @answer.to_json(include: %i[user attachments]) }
-    )
+    @question = @answer.question
   end
 
   def answer_params
-    params.require(:answer).permit(:body, attachments_attributes: [:file, :destroy])
+    params.require(:answer).permit(:body, attachments_attributes: [:file])
   end
 end

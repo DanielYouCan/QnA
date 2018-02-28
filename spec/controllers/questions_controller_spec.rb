@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   it_behaves_like 'voted'
-  
+
   let(:question) { create(:question) }
 
   describe 'GET #index' do
@@ -26,10 +26,6 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
-    it 'builds new attachment for the answer' do
-      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
-    end
-
     it 'renders show view' do
       expect(response).to render_template :show
     end
@@ -42,10 +38,6 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
-    end
-
-    it 'builds new attachment for the question' do
-      expect(assigns(:question).attachments.first).to be_a_new(Attachment)
     end
 
     it 'renders new view' do
@@ -71,11 +63,6 @@ RSpec.describe QuestionsController, type: :controller do
       it 'redirects to show view' do
         post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to question_path(assigns(:question))
-      end
-
-      it 'shows notice flash message' do
-        post :create, params: { question: attributes_for(:question) }
-        expect(controller).to set_flash[:notice].to('Your question was successfully created.')
       end
     end
 
@@ -148,26 +135,11 @@ RSpec.describe QuestionsController, type: :controller do
         delete :destroy, params: { id: my_question }
         expect(response).to redirect_to questions_path
       end
-
-      it 'shows notice flash message' do
-        delete :destroy, params: { id: my_question }
-        expect(controller).to set_flash[:notice].to('Your question was successfully deleted.')
-      end
     end
 
     context 'user is not the author of the question' do
       it 'does not delete question' do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
-      end
-
-      it 'shows a warning flash message' do
-        delete :destroy, params: { id: question }
-        expect(controller).to set_flash.now[:warning].to("You can't delete this question.")
-      end
-
-      it 're-renders show view' do
-        delete :destroy, params: { id: question }
-        expect(response).to render_template :show
       end
     end
 
