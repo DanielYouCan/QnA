@@ -24,5 +24,12 @@ Rails.application.routes.draw do
     resources :comments, only: %i[create destroy update], shallow: true
   end
 
+  get :set_authorization_confirmed, to: 'authorizations#set_confirmed'
+
+  namespace :users do
+    get :set_email
+    post :create_user
+  end
+
   mount ActionCable.server => '/cable'
 end

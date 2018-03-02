@@ -1,0 +1,5 @@
+<p>Hi, <%= @user.email %>!</p>
+
+<p>You have tried to sign in with <%= @authorization.provider %>.To confirm your email click the URL below:</p>
+
+<p><%= link_to 'Confirm my email', set_authorization_confirmed_url(@authorization, confirmation_token: @authorization.confirmation_token) %></p>

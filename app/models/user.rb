@@ -3,10 +3,10 @@ class User < ApplicationRecord
   has_many :answers
   has_many :votes
   has_many :comments
-  has_many :authorizations
+  has_many :authorizations, dependent: :destroy
 
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: [:facebook]
+  devise :database_authenticatable, :registerable, :confirmable,
+         :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: %i[facebook twitter]
 
   def author_of?(item)
     id == item.user_id
@@ -17,7 +17,9 @@ class User < ApplicationRecord
     return authorization.user if authorization
 
     email = auth.info[:email]
+    return User.new if email.blank?
     user = User.where(email: email).first
+
     if user
       user.create_authorization(auth)
     else
@@ -25,11 +27,31 @@ class User < ApplicationRecord
       user = User.create!(email: email, password: password, password_confirmation: password)
       user.create_authorization(auth)
     end
-    
+
     user
   end
 
-  def create_authorization(auth)
-    self.authorizations.create(provider: auth.provider, uid: auth.uid)
+  def self.create_user_for_network!(email, session)
+    user = User.where(email).first
+    return user.unconfirmed_authorization(session) if user
+
+    User.transaction do
+      password = Devise.friendly_token[0, 20]
+      user = User.create!(email.merge(password: password, password_confirmation: password))
+      user.create_authorization(session["devise.twitter_data"])
+      user.send_confirmation_instructions
+    end
   end
+
+  def unconfirmed_authorization(session)
+    authorization = self.create_authorization(session["devise.twitter_data"], true)
+    authorization.send_confirmation
+  end
+
+  def create_authorization(auth, *unconfirmed)
+    auth = OmniAuth::AuthHash.new(auth) if !auth.is_a?(OmniAuth::AuthHash)
+    return self.authorizations.create(provider: auth.provider, uid: auth.uid, confirmed: false) if unconfirmed.first
+    self.authorizations.create(provider: auth.provider, uid: auth.uid, confirmed: true)
+  end
+
 end
