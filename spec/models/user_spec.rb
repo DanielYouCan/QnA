@@ -32,7 +32,7 @@ RSpec.describe User, type: :model do
 
   describe '.find_for_oauth' do
     let!(:user) { create(:user) }
-    let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456') }
+    let(:auth) { mock_auth_hash_facebook }
 
     context 'user already has authorization with social network' do
       it 'returns the user' do
@@ -66,11 +66,12 @@ RSpec.describe User, type: :model do
       end
 
       context 'user does not exist' do
-        let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456', info: { email: 'newuser@user.com' }) }
+        let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456', info: { email: 'newuser@user.com', nickname: 'mockuser' }) }
 
         it 'creates new user' do
           expect { (User.find_for_oauth(auth)) }.to change(User, :count).by(1)
         end
+
         it 'returns new user' do
           expect(User.find_for_oauth(auth)).to be_a(User)
         end
