@@ -8,6 +8,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: %i[facebook twitter]
 
+  validates :username, presence: true, uniqueness: true, length: { minimum: 5 }
+
   def author_of?(item)
     id == item.user_id
   end
@@ -24,7 +26,8 @@ class User < ApplicationRecord
       user.create_authorization(auth)
     else
       password = Devise.friendly_token[0, 20]
-      user = User.create!(email: email, password: password, password_confirmation: password)
+      username = auth.info[:nickname]
+      user = User.create!(email: email, password: password, password_confirmation: password, username: username)
       user.create_authorization(auth)
     end
 
@@ -34,24 +37,25 @@ class User < ApplicationRecord
   def self.create_user_for_network!(email, session)
     return false unless email[:email].present?
     user = User.where(email).first
-    return user.unconfirmed_authorization(session) if user
+    auth = OmniAuth::AuthHash.new(session["devise.twitter_data"])
+    return user.unconfirmed_authorization(auth) if user
 
     User.transaction do
       password = Devise.friendly_token[0, 20]
-      user = User.create!(email.merge(password: password, password_confirmation: password))
-      user.create_authorization(session["devise.twitter_data"])
+      username = auth.info[:nickname]
+      user = User.create!(email.merge(password: password, password_confirmation: password, username: username))
+      user.create_authorization(auth)
       user.send_confirmation_instructions
     end
   end
 
-  def unconfirmed_authorization(session)
-    authorization = self.create_authorization(session["devise.twitter_data"], true)
+  def unconfirmed_authorization(auth)
+    authorization = self.create_authorization(auth, unconfirmed: true)
     authorization.send_confirmation
   end
 
-  def create_authorization(auth, *unconfirmed)
-    auth = OmniAuth::AuthHash.new(auth) if !auth.is_a?(OmniAuth::AuthHash)
-    return self.authorizations.create(provider: auth.provider, uid: auth.uid, confirmed: false) if unconfirmed.first
+  def create_authorization(auth, opts = {})
+    return self.authorizations.create(provider: auth.provider, uid: auth.uid, confirmed: false) if opts[:unconfirmed]
     self.authorizations.create(provider: auth.provider, uid: auth.uid, confirmed: true)
   end
 

@@ -8,6 +8,11 @@ module ApplicationHelper
   end
 
   def user_name(resource)
-    resource.user.email.split('@')[0]
+    resource.user.username
+  end
+
+  def greeting
+    greeting = "Hello, " + content_tag(:b, current_user.username)
+    greeting.html_safe
   end
 end

@@ -2,7 +2,7 @@
   div class='answer_#{@answer.id} answer'
     b= @answer.body
     |   |
-    i= "Author: #{@answer.user.email.split('@')[0]}"
+    i= "Author: #{@answer.user.username}"
     div class="answer_#{@answer.id}_rating rating"
       = @answer.rating
     - if gon.user_id
