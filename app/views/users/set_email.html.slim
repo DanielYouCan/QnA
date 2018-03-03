@@ -1,6 +1,6 @@
 b Enter your email to continue authentication
 = form_tag users_create_user_path do |f|
   p
-    = text_field_tag :email
+    = email_field_tag :email
   p
     = submit_tag 'Set email', class: 'btn btn-success'

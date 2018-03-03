@@ -1,5 +1,6 @@
 class Authorization < ApplicationRecord
   belongs_to :user
+  scope :by_provider, -> (provider, uid) { where(provider: provider, uid: uid.to_s) }
 
   def set_confirmed!
     Authorization.transaction do

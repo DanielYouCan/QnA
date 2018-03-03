@@ -13,7 +13,7 @@ class User < ApplicationRecord
   end
 
   def self.find_for_oauth(auth)
-    authorization = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first
+    authorization = Authorization.by_provider(auth.provider, auth.uid).first
     return authorization.user if authorization
 
     email = auth.info[:email]
@@ -32,6 +32,7 @@ class User < ApplicationRecord
   end
 
   def self.create_user_for_network!(email, session)
+    return false unless email[:email].present?
     user = User.where(email).first
     return user.unconfirmed_authorization(session) if user
 
