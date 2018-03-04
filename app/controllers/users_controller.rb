@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   end
 
   def create_user
-    if User.create_user_for_network!(users_params, session)
+    if User.create_user_for_network!(users_params, session["devise.provider_data"])
       redirect_to new_user_session_path, notice: "We've sent you an email to confirm your account"
     else
       render :set_email

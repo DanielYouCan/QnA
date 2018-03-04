@@ -42,6 +42,14 @@ RSpec.describe User, type: :model do
     end
 
     context 'user has not authorization' do
+      context 'provider does not return an email' do
+        let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456', info: { email: '' }) }
+
+        it 'returns unpersisted user' do
+          expect(User.find_for_oauth(auth).persisted?).to eq false
+        end
+      end
+
       context 'user already exists' do
         let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456', info: { email: user.email }) }
 
@@ -93,6 +101,65 @@ RSpec.describe User, type: :model do
           expect(authorization.uid).to eq auth.uid
         end
       end
+    end
+  end
+
+  describe '.create_user_for_network!' do
+    let(:session) {
+      { "provider" => "twitter", "uid" => "123456",
+      "info"=> { "nickname" => "mockuser", "name" => "Mock User",
+      "email" => nil } }
+    }
+
+    context 'Email is blank' do
+      let(:params) { { email: '' } }
+
+      it 'returns false' do
+        expect(User.create_user_for_network!(params, session)).to eq false
+      end
+    end
+
+    context 'User with given email exists' do
+      let(:user) { create(:user) }
+      let(:params) { { email: user.email } }
+
+      it 'creates unconfirmed authorization' do
+        expect { User.create_user_for_network!(params, session) }.to change(user.authorizations.where(confirmed: false), :count).by(1)
+      end
+    end
+
+    context 'User does not exist' do
+      let(:params) { { email: 'mock@test.com' } }
+
+      it 'creates new user' do
+        expect { User.create_user_for_network!(params, session) }.to change(User, :count).by(1)
+      end
+    end
+  end
+
+  describe '#create_authorization' do
+    let(:user) { create(:user) }
+    let(:auth) { mock_auth_hash_twitter }
+
+    it 'creates authorization for user' do
+      expect { user.create_authorization(auth) }.to change(user.authorizations, :count).by(1)
+    end
+
+    it 'creates unconfirmed authorization if parametr provided' do
+      expect { user.create_authorization(auth, unconfirmed: true) }.to change(user.authorizations.where(confirmed: false), :count).by(1)
+    end
+  end
+
+  describe '#create_unconfirmed_authorization' do
+    let(:user) { create(:user) }
+    let(:auth) { mock_auth_hash_twitter }
+
+    it 'creates unconfirmed authorization' do
+      expect { user.create_unconfirmed_authorization(auth) }.to change(user.authorizations.where(confirmed: false), :count).by(1)
+    end
+
+    it 'sends email with confirmation link to user' do
+      expect { user.create_unconfirmed_authorization(auth) }.to change(ActionMailer::Base.deliveries, :count).by(1)
     end
   end
 end

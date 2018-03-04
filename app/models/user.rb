@@ -30,11 +30,11 @@ class User < ApplicationRecord
   def self.create_user_for_network!(params, session)
     return false unless params[:email].present?
     user = User.where(params).first
-    auth = OmniAuth::AuthHash.new(session["devise.twitter_data"])
+    auth = OmniAuth::AuthHash.new(session)
     return user.create_unconfirmed_authorization(auth) if user
 
     email = params[:email]
-    create_user!(auth, email, need_confirm: true)
+    create_user!(auth, email)
   end
 
   def create_unconfirmed_authorization(auth)
@@ -49,15 +49,14 @@ class User < ApplicationRecord
 
   private
 
-  def self.create_user!(auth, email, opts = {})
+  def self.create_user!(auth, email)
     user = User.new
 
     User.transaction do
       password = Devise.friendly_token[0, 20]
-      username = auth.info[:nickname]
+      username = auth.info[:nickname] || auth.info[:name]
       user = User.create!(email: email, password: password, password_confirmation: password, username: username)
       user.create_authorization(auth)
-      user.send_confirmation_instructions if opts[:need_confirm]
     end
 
     user
