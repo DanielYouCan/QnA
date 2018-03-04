@@ -20,43 +20,47 @@ class User < ApplicationRecord
 
     email = auth.info[:email]
     return User.new if email.blank?
-    user = User.where(email: email).first
 
-    if user
-      user.create_authorization(auth)
-    else
-      password = Devise.friendly_token[0, 20]
-      username = auth.info[:nickname]
-      user = User.create!(email: email, password: password, password_confirmation: password, username: username)
-      user.create_authorization(auth)
-    end
+    user = User.where(email: email).first
+    user ? user.create_authorization(auth) : user = create_user!(auth, email)
 
     user
   end
 
-  def self.create_user_for_network!(email, session)
-    return false unless email[:email].present?
-    user = User.where(email).first
+  def self.create_user_for_network!(params, session)
+    return false unless params[:email].present?
+    user = User.where(params).first
     auth = OmniAuth::AuthHash.new(session["devise.twitter_data"])
-    return user.unconfirmed_authorization(auth) if user
+    return user.create_unconfirmed_authorization(auth) if user
 
-    User.transaction do
-      password = Devise.friendly_token[0, 20]
-      username = auth.info[:nickname]
-      user = User.create!(email.merge(password: password, password_confirmation: password, username: username))
-      user.create_authorization(auth)
-      user.send_confirmation_instructions
-    end
+    email = params[:email]
+    create_user!(auth, email, need_confirm: true)
   end
 
-  def unconfirmed_authorization(auth)
+  def create_unconfirmed_authorization(auth)
     authorization = self.create_authorization(auth, unconfirmed: true)
     authorization.send_confirmation
   end
 
   def create_authorization(auth, opts = {})
     return self.authorizations.create(provider: auth.provider, uid: auth.uid, confirmed: false) if opts[:unconfirmed]
-    self.authorizations.create(provider: auth.provider, uid: auth.uid, confirmed: true)
+    self.authorizations.create(provider: auth.provider, uid: auth.uid)
+  end
+
+  private
+
+  def self.create_user!(auth, email, opts = {})
+    user = User.new
+
+    User.transaction do
+      password = Devise.friendly_token[0, 20]
+      username = auth.info[:nickname]
+      user = User.create!(email: email, password: password, password_confirmation: password, username: username)
+      user.create_authorization(auth)
+      user.send_confirmation_instructions if opts[:need_confirm]
+    end
+
+    user
   end
 
 end
