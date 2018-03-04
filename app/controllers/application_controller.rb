@@ -10,13 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :gon_user, unless: :devise_controller?
 
-  rescue_from ActiveRecord::RecordNotFound, with: :rescue_with_resource_not_found
-
   private
-
-  def rescue_with_resource_not_found
-    render file: 'public/404.html'
-  end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:username])

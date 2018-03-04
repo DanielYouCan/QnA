@@ -30,6 +30,21 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#confirmed_authorization?' do
+    let!(:user) { create(:user) }
+    let!(:authorization) { create(:authorization, user: user) }
+    let!(:another_authorization) { create(:authorization, user: user, confirmed: false, uid: "123", provider: "test") }
+
+    it 'should return true if authorization is confirmed' do
+      expect(user).to be_has_confirmed_authorization("MyString", "MyString")
+    end
+
+    it 'should return false if authorization is not confirmed' do
+      expect(user).to_not be_has_confirmed_authorization("test", "123")
+    end
+
+  end
+
   describe '.find_for_oauth' do
     let!(:user) { create(:user) }
     let(:auth) { mock_auth_hash_facebook }

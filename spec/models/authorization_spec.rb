@@ -6,12 +6,12 @@ RSpec.describe Authorization, type: :model do
   let!(:authorization) { create(:authorization, confirmed: false, confirmation_token: 'mytoken') }
 
   describe '#set_confirmed!' do
-    it 'sets confrimed to true' do
+    it 'sets confirmed to true' do
       authorization.set_confirmed!
-      expect(authorization.confirmed).to eq true
+      expect(authorization).to be_confirmed
     end
 
-    it 'sets confrimation token to nil' do
+    it 'sets confirmation token to nil' do
       authorization.set_confirmed!
       expect(authorization.confirmation_token).to eq nil
     end

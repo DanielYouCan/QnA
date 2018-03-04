@@ -47,6 +47,10 @@ class User < ApplicationRecord
     self.authorizations.create(provider: auth.provider, uid: auth.uid)
   end
 
+  def has_confirmed_authorization?(provider, uid)
+    authorizations.by_provider(provider, uid).first.confirmed?
+  end
+
   private
 
   def self.create_user!(auth, email)

@@ -3,11 +3,8 @@ class Authorization < ApplicationRecord
   scope :by_provider, -> (provider, uid) { where(provider: provider, uid: uid.to_s) }
 
   def set_confirmed!
-    Authorization.transaction do
-      self.confirmed = true
-      self.confirmation_token = nil
-      save!
-    end
+    self.update!(confirmed: true)
+    self.update!(confirmation_token: nil)
   end
 
   def send_confirmation
@@ -19,9 +16,8 @@ class Authorization < ApplicationRecord
 
   def set_confirmation_token
     return false unless confirmation_token.blank?
-    Authorization.transaction do
-      self.confirmation_token = SecureRandom.urlsafe_base64.to_s
-      save!
-    end
+    token = SecureRandom.urlsafe_base64.to_s
+    
+    self.update!(confirmation_token: token)
   end
 end
