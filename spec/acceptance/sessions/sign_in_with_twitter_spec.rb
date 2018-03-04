@@ -9,23 +9,23 @@ feature 'User signs in using twitter account', %q{
   given(:user) { create(:user) }
 
   background do
-     visit new_user_session_path
-     mock_auth_hash_twitter
-     click_on 'Sign in with Twitter'
-   end
+    visit new_user_session_path
+    mock_auth_hash_twitter
+    click_on 'Sign in with Twitter'
+  end
+
+  scenario 'User sees buttom Set email' do
+    expect(page).to have_selector(:link_or_button, 'Set email')
+  end
+
+  scenario 'User gets email' do
+    fill_in 'email', with: "myemail@gmail.com"
+    click_on 'Set email'
+    open_email('myemail@gmail.com')
+    expect(current_email).to have_link 'Confirm my account'
+  end
 
   context 'User does not have a regular account in system' do
-    scenario 'User sees buttom Set email' do
-      expect(page).to have_selector(:link_or_button, 'Set email')
-    end
-
-    scenario 'User gets email' do
-      fill_in 'email', with: "myemail@gmail.com"
-      click_on 'Set email'
-      open_email('myemail@gmail.com')
-      expect(current_email).to have_link 'Confirm my account'
-    end
-
     scenario 'User confirms his/her email' do
       fill_in 'email', with: "myemail@gmail.com"
       click_on 'Set email'
@@ -40,17 +40,6 @@ feature 'User signs in using twitter account', %q{
   end
 
   context 'User already has a regular account in system' do
-    scenario 'User sees buttom Set email' do
-      expect(page).to have_selector(:link_or_button, 'Set email')
-    end
-
-    scenario 'User gets email' do
-      fill_in 'email', with: user.email
-      click_on 'Set email'
-      open_email(user.email)
-      expect(current_email).to have_link 'Confirm my email'
-    end
-
     scenario 'User confirms his/her email' do
       fill_in 'email', with: user.email
       click_on 'Set email'

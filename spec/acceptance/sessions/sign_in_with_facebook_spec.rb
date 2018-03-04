@@ -9,7 +9,7 @@ feature 'User signs in using facebook account', %q{
   context 'User already has a regular account in system' do
     given!(:user) { create(:user, email: "mock@mock.com", confirmed_at: Time.now) }
 
-    scenario 'User signs in with' do
+    scenario 'User signs in with facebook' do
       visit new_user_session_path
       mock_auth_hash_facebook
       click_on 'Sign in with Facebook'
