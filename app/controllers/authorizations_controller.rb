@@ -4,7 +4,7 @@ class AuthorizationsController < ApplicationController
 
   def set_confirmed
     if @authorization.set_confirmed!
-      redirect_to root_path, notice: "You have confrimed your email! Now you can sign in using #{@authorization.provider.capitalize}"
+      redirect_to new_user_session_path, notice: "You have confrimed your email! Now you can sign in using #{@authorization.provider.capitalize}"
     end
   end
 
