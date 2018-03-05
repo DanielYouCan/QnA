@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "questions#index"
 
@@ -22,6 +22,13 @@ Rails.application.routes.draw do
   resources :attachments, only: :destroy
   resources :questions, :answers, concerns: [:votable] do
     resources :comments, only: %i[create destroy update], shallow: true
+  end
+
+  get :set_authorization_confirmed, to: 'authorizations#set_confirmed'
+
+  namespace :users do
+    get :set_email
+    post :create_user
   end
 
   mount ActionCable.server => '/cable'

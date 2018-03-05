@@ -14,9 +14,12 @@ feature 'User signs up', %q{
     fill_in 'Email', with: 'newemail@test.com'
     fill_in 'Password', with: 'newpass123'
     fill_in 'Password confirmation', with: 'newpass123'
+    fill_in 'Username', with: 'myname'
     click_on 'Sign up'
 
-    expect(page).to have_content 'Welcome! You have signed up successfully.'
+    open_email('newemail@test.com')
+    current_email.click_on 'Confirm my account'
+    expect(page).to have_content 'Your email address has been successfully confirmed.'
   end
 
   scenario 'User already exists' do
@@ -25,6 +28,7 @@ feature 'User signs up', %q{
     fill_in 'Email', with: user.email
     fill_in 'Password', with: '123456'
     fill_in 'Password confirmation', with: '123456'
+    fill_in 'Username', with: 'myname'
     click_on 'Sign up'
 
     expect(page).to have_content 'Email has already been taken'
@@ -36,6 +40,7 @@ feature 'User signs up', %q{
     fill_in 'Email', with: 'newemail@test.com'
     fill_in 'Password', with: '12345'
     fill_in 'Password confirmation', with: '12345'
+    fill_in 'Username', with: 'myname'
     click_on 'Sign up'
 
     expect(page).to have_content 'Password is too short'
@@ -47,6 +52,7 @@ feature 'User signs up', %q{
     fill_in 'Email', with: 'newemail@test.com'
     fill_in 'Password', with: '123456'
     fill_in 'Password confirmation', with: '123457'
+    fill_in 'Username', with: 'myname'
     click_on 'Sign up'
 
     expect(page).to have_content "Password confirmation doesn't match Password"
@@ -58,6 +64,7 @@ feature 'User signs up', %q{
     fill_in 'Email', with: 'test-test.com'
     fill_in 'Password', with: '123456'
     fill_in 'Password confirmation', with: '123456'
+    fill_in 'Username', with: 'myname'
     click_on 'Sign up'
 
     expect(page).to have_content 'Email is invalid'
