@@ -6,7 +6,6 @@ class AnswersController < ApplicationController
 
   respond_to :js
   authorize_resource
-  skip_authorization_check only: :create
 
   def create
     respond_with(@answer = @question.answers.create(answer_params.merge(user: current_user)))

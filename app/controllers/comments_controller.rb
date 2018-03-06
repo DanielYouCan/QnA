@@ -5,7 +5,6 @@ class CommentsController < ApplicationController
 
   respond_to :js
   authorize_resource
-  skip_authorization_check only: :create
 
   def create
     respond_with(@comment = @commentable.comments.create(comment_params.merge(user: current_user)))

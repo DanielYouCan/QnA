@@ -12,7 +12,7 @@ RSpec.describe Ability, type: :model do
     it { should_not be_able_to :manage, :all }
   end
 
-  describe 'admin' do
+  describe 'for admin' do
     let(:user) { create(:user, admin: true) }
 
     it { should be_able_to :manage, :all }
@@ -46,6 +46,8 @@ RSpec.describe Ability, type: :model do
       it { should_not be_able_to :destroy, create(:answer, user: other) }
       it { should be_able_to :destroy, create(:comment, user: user, commentable: question) }
       it { should_not be_able_to :destroy, create(:comment, user: other, commentable: question) }
+      it { should be_able_to :destroy, create(:attachment, attachable: question) }
+      it { should_not be_able_to :destroy, create(:attachment, attachable: another_question) }
     end
 
     describe "User's ability to set answer best" do

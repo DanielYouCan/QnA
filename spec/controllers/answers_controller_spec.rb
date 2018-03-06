@@ -91,11 +91,6 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not delete the answer' do
         expect { delete :destroy, params: { id: new_answer, format: :js  } }.to_not change(Answer, :count)
       end
-
-      it 'redirects to root path' do
-        delete :destroy, params: { id: new_answer, format: :js  }
-        expect(response).to redirect_to root_path
-      end
     end
   end
 

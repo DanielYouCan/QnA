@@ -5,8 +5,6 @@ module Votable
   end
 
   def rating_up!(user)
-    return false unless votable?(user)
-
     transaction do
       votes.create!(user: user, value: 1)
       self.rating += 1
@@ -15,8 +13,6 @@ module Votable
   end
 
   def rating_down!(user)
-    return false unless votable?(user)
-
     transaction do
       votes.create!(user: user, value: -1)
       self.rating -= 1
@@ -25,7 +21,6 @@ module Votable
   end
 
   def cancel_vote!(user)
-    return false if votes.where(user: user).empty?
     vote = votes.where(user: user).first
 
     transaction do
@@ -36,9 +31,4 @@ module Votable
     end
   end
 
-  private
-
-  def votable?(user)
-    votes.where(user: user).blank? && !user.author_of?(self)
-  end
 end

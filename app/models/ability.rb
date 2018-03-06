@@ -15,6 +15,8 @@ class Ability
 
   def guest_abilities
     can :read, :all
+    can :set_email, User
+    can :create_user, User
   end
 
   def admin_abilities
@@ -22,20 +24,19 @@ class Ability
   end
 
   def user_abilities
-    guest_abilities
+    can :read, :all
     can :create, [Question, Answer, Comment]
-    can :update, [Question, Answer, Comment], user: user
-    can :destroy, [Question, Answer, Comment], user: user
+    can [:update, :destroy], [Question, Answer, Comment], user: user
 
     can :destroy, Attachment, attachable: { user: user }
 
     can [:set_best], Answer, question: { user: user }
 
-    can [:rating_up, :rating_down], [Question, Answer] do |votable|
+    can [:rating_up, :rating_down], Votable do |votable|
       votable.user != user && votable.votes.where(user: user).blank?
     end
 
-    can [:cancel_vote], [Question, Answer] do |votable|
+    can [:cancel_vote], Votable do |votable|
       votable.votes.where(user: user).present?
     end
   end
