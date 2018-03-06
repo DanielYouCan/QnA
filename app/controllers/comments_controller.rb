@@ -4,19 +4,21 @@ class CommentsController < ApplicationController
   before_action :set_comment, only: %i[update destroy]
 
   respond_to :js
+  authorize_resource
+  skip_authorization_check only: :create
 
   def create
     respond_with(@comment = @commentable.comments.create(comment_params.merge(user: current_user)))
   end
 
   def update
-    @comment.update(comment_params) if current_user.author_of?(@comment)
+    @comment.update(comment_params)
     @commentable = @comment.commentable
     respond_with @comment
   end
 
   def destroy
-    respond_with(@comment.destroy) if current_user.author_of?(@comment)
+    respond_with(@comment.destroy)
   end
 
   private

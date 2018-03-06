@@ -95,7 +95,7 @@ RSpec.describe CommentsController, type: :controller do
 
       it 'renders question show' do
         delete :destroy, params: { id: new_comment, format: :js  }
-        expect(response).to render_template :destroy
+        expect(response).to redirect_to root_path
       end
     end
   end

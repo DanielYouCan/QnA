@@ -1,6 +1,7 @@
 class AuthorizationsController < ApplicationController
   skip_before_action :authenticate_user!
   before_action :find_authorization
+  skip_authorization_check
 
   def set_confirmed
     if @authorization.set_confirmed!

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   it_behaves_like 'voted'
-  
+
   let!(:question) { create(:question) }
   let(:user) { create(:user) }
   let!(:answer) { create(:answer, question: question, user: user) }
@@ -92,9 +92,9 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, params: { id: new_answer, format: :js  } }.to_not change(Answer, :count)
       end
 
-      it 'renders question show' do
+      it 'redirects to root path' do
         delete :destroy, params: { id: new_answer, format: :js  }
-        expect(response).to render_template :destroy
+        expect(response).to redirect_to root_path
       end
     end
   end

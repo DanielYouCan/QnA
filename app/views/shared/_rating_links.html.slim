@@ -1,0 +1,8 @@
+- if can? :rating_up, resource
+  .vote
+    = link_to (octicon 'thumbsup', height: 20, class: 'text-notice'), polymorphic_path(resource, action: :rating_up), method: :patch, remote: true
+    = link_to (octicon 'thumbsdown', height: 20, class: 'text-danger'), polymorphic_path(resource, action: :rating_down), method: :patch, remote: true
+.cancel_vote
+  - if can? :cancel_vote, resource
+    = link_to 'Cancel vote', polymorphic_path(resource, action: :cancel_vote), method: :patch, remote: true
+div class="vote_error_#{resource.id}"

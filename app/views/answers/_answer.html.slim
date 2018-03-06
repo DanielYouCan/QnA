@@ -5,8 +5,7 @@
     i= "Author: #{user_name(answer)}"
     div class="answer_#{answer.id}_rating rating"
       = answer.rating
-    - if current_user && !current_user.author_of?(answer)
-      = render 'answers/vote_link', answer: answer
+      = render 'shared/rating_links', resource: answer
     - if answer.attachments.present?
       div class="attachments_answer_#{answer.id}"
         b Attachments:
@@ -15,9 +14,9 @@
     - if answer.best?
       = octicon 'check', height: 32, class: 'text-success'
       br
-    - if show_set_best?(current_user, answer)
+    - if can? :set_best, answer
       = link_to 'Set best', set_best_answer_path(answer), method: :patch, class: 'best-answer-link', data: { answer_id: answer.id }, remote: true
-    - if current_user&.author_of?(answer)
+    - if can? :destroy, answer
       p
         = link_to 'Delete answer', answer_path(answer), class: 'delete-answer-link', method: :delete, remote: true, data: { confirm: 'Are you sure?' }
         |   |
@@ -37,7 +36,7 @@
             = render 'shared/link_attachments', f: f
           = f.submit
           end
-    - if user_signed_in?
+    - if can? :create, Comment
       = link_to 'Add comment', '', class: 'add-comment-link', data: { resource_id: answer.id, resource_type: "answer" }
       br
       div id="comment-errors-answer-#{answer.id}"

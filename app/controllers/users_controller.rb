@@ -2,6 +2,7 @@ class UsersController < ApplicationController
 
   skip_before_action :authenticate_user!
   before_action :user_not_logged_in
+  skip_authorization_check
 
   def set_email
   end
