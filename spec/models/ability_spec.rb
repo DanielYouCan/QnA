@@ -16,6 +16,8 @@ RSpec.describe Ability, type: :model do
     let(:user) { create(:user, admin: true) }
 
     it { should be_able_to :manage, :all }
+    it { should be_able_to :create_user, User }
+    it { should be_able_to :set_email, User }
   end
 
   describe 'for user' do

@@ -30,7 +30,7 @@ class Ability
 
     can :destroy, Attachment, attachable: { user: user }
 
-    can [:set_best], Answer, question: { user: user }
+    can [:set_best], Answer, best: false, question: { user: user }
 
     can [:rating_up, :rating_down], Votable do |votable|
       votable.user != user && votable.votes.where(user: user).blank?

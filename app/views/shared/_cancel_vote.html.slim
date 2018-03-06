@@ -1,0 +1,7 @@
+- classname = resource.is_a?(Question) ? 'cancel_vote_question' : 'cancel_vote'
+
+div class="#{classname}"
+  a class="mock-link" data-remote="true" rel="nofollow" data-method="patch"
+
+  - if can? :cancel_vote, resource
+    = link_to 'Cancel vote', polymorphic_path(resource, action: :cancel_vote), method: :patch, remote: true

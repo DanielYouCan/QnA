@@ -39,19 +39,4 @@ feature 'Non-author user votes for answer', %q{
       expect(page).to have_content '1'
     end
   end
-
-  scenario 'User tries to re-vote for answer', js: true do
-    sign_in(user)
-    visit question_path(question)
-
-    within ".answer_#{answer.id}" do
-      find('.octicon-thumbsup').click
-      sleep 0.5
-      find('.octicon-thumbsup').click
-    end
-
-    within ".vote_error_#{answer.id}" do
-      expect(page).to have_content 'You have already voted!'
-    end
-  end
 end

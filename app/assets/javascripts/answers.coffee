@@ -6,7 +6,10 @@
 vote = ->
   $('.vote').bind 'ajax:success', (e) ->
     answer = $.parseJSON(e.detail[2].responseText)
-    $('.answer_' + answer.id + '_rating').html(answer.rating)
+    $(".answer_#{answer.id}_rating").html(answer.rating)
+    $(this).hide()
+    $(this).next().children().first().html("Cancel vote").show()
+    $(this).next().children().first().attr("href", "/answers/#{answer.id}/cancel_vote")
   .bind 'ajax:error', (e) ->
     id = $.parseJSON(e.detail[0])
     $('.vote_error_' + id).html("You have already voted!")
@@ -14,7 +17,8 @@ vote = ->
 cancel_vote = ->
   $('.cancel_vote').bind 'ajax:success', (e) ->
     answer = $.parseJSON(e.detail[2].responseText)
-    $('.answer_' + answer.id + '_rating').html(answer.rating)
+    $(".answer_#{answer.id}_rating").html(answer.rating)
+    $(this).hide()
   .bind 'ajax:error', (e) ->
     id = $.parseJSON(e.detail[0])
     $('.vote_error_' + id).html("You haven't voted yet")

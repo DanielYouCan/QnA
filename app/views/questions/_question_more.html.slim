@@ -7,21 +7,23 @@
     i= "Author: #{user_name(@question)}"
     div class="question_rating rating"
       = @question.rating
-    - if current_user && !current_user.author_of?(@question)
-      = render 'vote_link', question: @question
+    - if can? :rating_up, @question
+      = render 'shared/rating_links', resource: @question
+    = render 'shared/cancel_vote', resource: @question
+    div class="vote_error_question"
     - if @question.attachments.present?
       .attachments_question
         b Attachments:
         ul
           = render @question.attachments
 
-    - if current_user&.author_of?(@question)
+    - if can? :update, @question
       = link_to 'Delete question', question_path(@question), method: :delete
       |    |
       = link_to 'Edit question', '', class: 'edit-question-link'
       .question-update-errors
       = render 'edit_form'
-    - if user_signed_in?
+    - if can? :create, Comment
       = link_to 'Add comment', '', class: 'add-comment-link', data: { resource_id: @question.id, resource_type: "question" }
       br
       div id="comment-errors-question-#{@question.id}"

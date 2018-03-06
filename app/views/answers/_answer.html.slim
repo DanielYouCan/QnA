@@ -5,7 +5,10 @@
     i= "Author: #{user_name(answer)}"
     div class="answer_#{answer.id}_rating rating"
       = answer.rating
+    - if can? :rating_up, answer
       = render 'shared/rating_links', resource: answer
+    = render 'shared/cancel_vote', resource: answer
+      div class="vote_error_#{answer.id}"
     - if answer.attachments.present?
       div class="attachments_answer_#{answer.id}"
         b Attachments:
@@ -16,6 +19,7 @@
       br
     - if can? :set_best, answer
       = link_to 'Set best', set_best_answer_path(answer), method: :patch, class: 'best-answer-link', data: { answer_id: answer.id }, remote: true
+      br
     - if can? :destroy, answer
       p
         = link_to 'Delete answer', answer_path(answer), class: 'delete-answer-link', method: :delete, remote: true, data: { confirm: 'Are you sure?' }

@@ -22,15 +22,6 @@ shared_examples_for "votable" do
       votable.rating_up!(user)
       expect(votable.rating - rating).to eq(1)
     end
-
-    it 'should return false if user has already voted' do
-      votable.rating_up!(user)
-      expect(votable.rating_up!(user)).to eq false
-    end
-
-    it 'should return false if user is an author' do
-      expect(votable.rating_up!(votable.user)).to eq false
-    end
   end
 
   describe "#rating_down!" do
@@ -47,15 +38,6 @@ shared_examples_for "votable" do
       rating = votable.rating
       votable.rating_down!(user)
       expect(rating - votable.rating).to eq(1)
-    end
-
-    it 'should return false if user has already voted' do
-      votable.rating_down!(user)
-      expect(votable.rating_down!(user)).to eq false
-    end
-
-    it 'should return false if user is an author' do
-      expect(votable.rating_down!(votable.user)).to eq false
     end
   end
 end

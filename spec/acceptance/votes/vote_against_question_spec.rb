@@ -38,19 +38,4 @@ feature 'Non-author user votes against question', %q{
       expect(page).to have_content '-1'
     end
   end
-
-  scenario 'User tries to re-vote against question', js: true do
-    sign_in(user)
-    visit question_path(question)
-
-    within ".question" do
-      find('.octicon-thumbsup').click
-      sleep 0.5
-      find('.octicon-thumbsdown').click
-    end
-
-    within '.vote_error_question' do
-      expect(page).to have_content 'You have already voted!'
-    end
-  end
 end
