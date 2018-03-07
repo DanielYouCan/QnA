@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.json { render json: exception.subject.id, status: :forbidden }
       format.html { redirect_to root_url, alert: exception.message }
-      format.js  { redirect_to root_url, alert: exception.message }
+      format.js  { render json: exception.subject.id, status: :forbidden }
     end
   end
 

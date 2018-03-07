@@ -26,14 +26,14 @@ class Ability
   def user_abilities
     can :read, :all
     can :create, [Question, Answer, Comment]
-    can [:update, :destroy], [Question, Answer, Comment], user: user
+    can [:update, :destroy], [Question, Answer, Comment], user_id: user.id
 
-    can :destroy, Attachment, attachable: { user: user }
+    can :destroy, Attachment, attachable: { user_id: user.id }
 
-    can [:set_best], Answer, best: false, question: { user: user }
+    can [:set_best], Answer, best: false, question: { user_id: user.id }
 
     can [:rating_up, :rating_down], Votable do |votable|
-      votable.user != user && votable.votes.where(user: user).blank?
+      !user.author_of?(votable) && votable.votes.where(user: user).blank?
     end
 
     can [:cancel_vote], Votable do |votable|
