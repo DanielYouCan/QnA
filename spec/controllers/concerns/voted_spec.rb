@@ -9,7 +9,7 @@ shared_examples_for 'voted' do
 
   describe 'PATCH #rating_up' do
     before { patch :rating_up, params: { id: votable.id, format: :json } }
-    
+
     it 'gets json response' do
       expect(response.header['Content-Type']).to include 'application/json'
       expect(response.body).to eq (assigns(:votable)).to_json

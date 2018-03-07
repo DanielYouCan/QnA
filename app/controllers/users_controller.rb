@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   skip_before_action :authenticate_user!
-  before_action :user_not_logged_in
+  authorize_resource
 
   def set_email
   end

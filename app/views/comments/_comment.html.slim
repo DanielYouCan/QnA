@@ -2,7 +2,7 @@
   div class="comment_#{comment.id} comment"
     = comment.body
     br
-    - if current_user&.author_of?(comment)
+    - if can? :destroy, comment
       = link_to 'Delete comment', comment_path(comment), class: 'delete-comment-link', method: :delete, remote: true, data: { confirm: 'Are you sure?' }
       |   |
       = link_to 'Edit comment', '', class: 'edit-comment-link', data: { comment_id: comment.id }

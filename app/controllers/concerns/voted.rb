@@ -3,35 +3,28 @@ module Voted
 
   included do
     before_action :set_votable, only: %i[rating_up rating_down cancel_vote]
+
+    load_and_authorize_resource only: %i[rating_up rating_down cancel_vote]
   end
 
   def rating_up
     respond_to do |format|
-      if @votable.rating_up!(current_user)
-        format.json { render json: @votable }
-      else
-        format.json { render json: @votable.id, status: :forbidden }
-      end
+      @votable.rating_up!(current_user)
+      format.json { render json: @votable }
     end
   end
 
   def rating_down
     respond_to do |format|
-      if @votable.rating_down!(current_user)
-        format.json { render json: @votable }
-      else
-        format.json { render json: @votable.id, status: :forbidden }
-      end
+      @votable.rating_down!(current_user)
+      format.json { render json: @votable }
     end
   end
 
   def cancel_vote
     respond_to do |format|
-      if @votable.cancel_vote!(current_user)
-        format.json { render json: @votable }
-      else
-        format.json { render json: @votable.id, status: :forbidden }
-      end
+      @votable.cancel_vote!(current_user)
+      format.json { render json: @votable }
     end
   end
 
