@@ -1,6 +1,7 @@
 class Api::V1::ProfilesController < ApplicationController
-  skip_authorization_check
+  skip_before_action :authenticate_user!
   before_action :doorkeeper_authorize!
+  authorize_resource class: User
 
   respond_to :json
 
@@ -8,7 +9,7 @@ class Api::V1::ProfilesController < ApplicationController
     respond_with(current_resource_owner)
   end
 
-  def all
+  def index
     respond_with(User.where.not(id: current_resource_owner.id))
   end
 

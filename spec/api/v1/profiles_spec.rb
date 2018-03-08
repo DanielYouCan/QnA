@@ -18,10 +18,7 @@ RSpec.describe 'Profile API', type: 'request' do
       let(:me) { create(:user) }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
-      before do
-        login_as(me)
-        get '/api/v1/profiles/me', params: { format: :json, access_token: access_token.token }
-      end
+      before { get '/api/v1/profiles/me', params: { format: :json, access_token: access_token.token } }
 
       it 'returns 200 status' do
         expect(response).to be_success
@@ -44,12 +41,12 @@ RSpec.describe 'Profile API', type: 'request' do
   describe 'GET /all' do
     context 'unauthorized' do
       it 'returns 401 status if there is no access_token' do
-        get '/api/v1/profiles/all', params: { format: :json }
+        get '/api/v1/profiles/', params: { format: :json }
         expect(response.status).to eq 401
       end
 
       it 'returns 401 status if there access_token is invalid' do
-        get '/api/v1/profiles/all', params: { format: :json, access_token: '1234' }
+        get '/api/v1/profiles/', params: { format: :json, access_token: '1234' }
         expect(response.status).to eq 401
       end
     end
@@ -59,10 +56,7 @@ RSpec.describe 'Profile API', type: 'request' do
       let!(:users) { create_list(:user, 3) }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
-      before do
-        login_as(me)
-        get '/api/v1/profiles/all', params: { format: :json, access_token: access_token.token }
-      end
+      before { get '/api/v1/profiles/', params: { format: :json, access_token: access_token.token } }
 
       it 'returns 200 status' do
         expect(response).to be_success
