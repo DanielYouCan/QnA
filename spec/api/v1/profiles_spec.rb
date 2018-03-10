@@ -62,6 +62,10 @@ RSpec.describe 'Profile API', type: 'request' do
         expect(response).to be_success
       end
 
+      it 'returns collection of questions' do
+        expect(response.body).to have_json_size(3).at_path('/')
+      end
+
       %w(id email created_at updated_at admin).each do |attr|
         it "contains #{attr}" do
           expect(response.body).to be_json_eql(users[0].send(attr.to_sym).to_json).at_path("0/#{attr}")

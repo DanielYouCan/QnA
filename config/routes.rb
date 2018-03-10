@@ -14,11 +14,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resource :profiles do
+      resources :profiles do
         get :me, on: :collection
-        get :index, on: :collection
       end
-      resources :questions
+      resources :questions do
+        resources :answers, shallow: true
+      end
     end
   end
 
