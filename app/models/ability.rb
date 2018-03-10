@@ -22,6 +22,7 @@ class Ability
     common_abilities
     can :set_email, User
     can :create_user, User
+    can :create, :question
   end
 
   def admin_abilities
