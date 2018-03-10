@@ -20,6 +20,10 @@ class ApplicationController < ActionController::Base
 
   check_authorization unless: :devise_controller?
 
+  def doorkeeper_unauthorized_render_options(error: nil)
+    { json: error.body }
+  end
+
   private
 
   def configure_permitted_parameters

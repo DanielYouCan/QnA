@@ -38,7 +38,7 @@ RSpec.describe 'Profile API', type: 'request' do
     end
   end
 
-  describe 'GET /all' do
+  describe 'GET /index' do
     context 'unauthorized' do
       it 'returns 401 status if there is no access_token' do
         get '/api/v1/profiles/', params: { format: :json }
@@ -64,23 +64,19 @@ RSpec.describe 'Profile API', type: 'request' do
 
       %w(id email created_at updated_at admin).each do |attr|
         it "contains #{attr}" do
-          response.body[1...-2].split('},').each_with_index do |profile, index|
-            expect("#{profile}}").to be_json_eql(users[index].send(attr.to_sym).to_json).at_path(attr)
-          end
+          expect(response.body).to be_json_eql(users[0].send(attr.to_sym).to_json).at_path("0/#{attr}")
         end
       end
 
       it "doesn't return resource owner user" do
-        response.body[1...-2].split('},').each_with_index do |profile|
-          expect("#{profile}}").to_not be_json_eql(me.id.to_json).at_path('id')
+        (0...users.length).each do |index|
+          expect(response.body).to_not be_json_eql(me.id.to_json).at_path("#{index}/id")
         end
       end
 
       %w(password encrypted_password).each do |attr|
         it "doesn't contain #{attr}" do
-          response.body[1...-2].split('},').each_with_index do |profile, index|
-            expect("#{profile}}").to_not have_json_path(attr)
-          end
+          expect(response.body).to_not have_json_path("0/#{attr}")
         end
       end
     end
