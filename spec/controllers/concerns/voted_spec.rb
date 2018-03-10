@@ -12,7 +12,7 @@ shared_examples_for 'voted' do
 
     it 'gets json response' do
       expect(response.header['Content-Type']).to include 'application/json'
-      expect(response.body).to eq (assigns(:votable)).to_json
+      expect(response.body).to be_json_eql(assigns(:votable).to_json).at_path(votable.class.name.downcase)
     end
 
     it 'returns id and forbidden status if rating_up! returns false' do
@@ -28,7 +28,7 @@ shared_examples_for 'voted' do
 
     it 'gets json response' do
       expect(response.header['Content-Type']).to include 'application/json'
-      expect(response.body).to eq (assigns(:votable)).to_json
+      expect(response.body).to be_json_eql(assigns(:votable).to_json).at_path(votable.class.name.downcase)
     end
 
     it 'returns id and forbidden status if rating_down! returns false' do
@@ -44,7 +44,7 @@ shared_examples_for 'voted' do
       patch :rating_up, params: { id: votable.id, format: :json }
       patch :cancel_vote, params: { id: votable.id, format: :json }
       expect(response.header['Content-Type']).to include 'application/json'
-      expect(response.body).to eq (assigns(:votable)).to_json
+      expect(response.body).to be_json_eql(assigns(:votable).to_json).at_path(votable.class.name.downcase)
     end
 
     it 'returns id and forbidden status if cancel_vote! returns false' do

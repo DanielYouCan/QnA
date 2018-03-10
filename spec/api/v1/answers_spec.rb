@@ -91,4 +91,36 @@ RSpec.describe 'Answers API', type: 'request' do
       end
     end
   end
+
+  describe 'POST /create' do
+    context 'unauthorized' do
+      it 'returns 401 status if there is no access_token' do
+        post '/api/v1/questions/1/answers', params: { format: :json, question: attributes_for(:question) }
+        expect(response.status).to eq 401
+      end
+
+      it 'returns 401 status if there access_token is invalid' do
+        post '/api/v1/questions/1/answers', params: { format: :json, question: attributes_for(:question), access_token: '1234' }
+        expect(response.status).to eq 401
+      end
+    end
+
+    context 'authorized' do
+      let(:access_token) { create(:access_token) }
+      let!(:question) { create(:question) }
+      let(:user) { User.find(access_token.resource_owner_id) }
+
+      before { post "/api/v1/questions/#{question.id}/answers", params: { format: :json, answer: attributes_for(:answer), access_token: access_token.token } }
+
+      it 'returns 201 status' do
+        expect(response.status).to eq 201
+      end
+
+      %w(id body created_at updated_at).each do |attr|
+        it "contains #{attr}" do
+          expect(response.body).to be_json_eql(question.answers.last.send(attr.to_sym).to_json).at_path("answer/#{attr}")
+        end
+      end
+    end
+  end
 end

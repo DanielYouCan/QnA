@@ -107,39 +107,39 @@ RSpec.describe 'Questions API', type: 'request' do
         end
       end
     end
+  end
 
-    describe 'POST /create' do
-      context 'unauthorized' do
-        it 'returns 401 status if there is no access_token' do
-          post '/api/v1/questions', params: { format: :json, question: attributes_for(:question) }
-          expect(response.status).to eq 401
-        end
+  describe 'POST /create' do
+    context 'unauthorized' do
+      it 'returns 401 status if there is no access_token' do
+        post '/api/v1/questions', params: { format: :json, question: attributes_for(:question) }
+        expect(response.status).to eq 401
+      end
 
-        it 'returns 401 status if there access_token is invalid' do
-          post '/api/v1/questions', params: { format: :json, question: attributes_for(:question), access_token: '1234' }
-          expect(response.status).to eq 401
+      it 'returns 401 status if there access_token is invalid' do
+        post '/api/v1/questions', params: { format: :json, question: attributes_for(:question), access_token: '1234' }
+        expect(response.status).to eq 401
+      end
+    end
+
+    context 'authorized' do
+      let(:access_token) { create(:access_token) }
+      let(:user) { User.find(access_token.resource_owner_id) }
+
+      before { post '/api/v1/questions', params: { format: :json, question: attributes_for(:question), access_token: access_token.token } }
+
+      it 'returns 201 status' do
+        expect(response.status).to eq 201
+      end
+
+      %w(id title body created_at updated_at).each do |attr|
+        it "contains #{attr}" do
+          expect(response.body).to be_json_eql(user.questions.last.send(attr.to_sym).to_json).at_path("question/#{attr}")
         end
       end
 
-      context 'authorized' do
-        let(:access_token) { create(:access_token) }
-        let(:user) { User.find(access_token.resource_owner_id) }
-
-        before { post '/api/v1/questions', params: { format: :json, question: attributes_for(:question), access_token: access_token.token } }
-
-        it 'returns 201 status' do
-          expect(response.status).to eq 201
-        end
-
-        %w(id body created_at updated_at).each do |attr|
-          it "contains #{attr}" do
-            expect(response.body).to be_json_eql(user.questions.last.send(attr.to_sym).to_json).at_path("question/#{attr}")
-          end
-        end
-
-        it 'question object contains short_title' do
-          expect(response.body).to be_json_eql(user.questions.last.title.truncate(10).to_json).at_path("question/short_title")
-        end
+      it 'question object contains short_title' do
+        expect(response.body).to be_json_eql(user.questions.last.title.truncate(10).to_json).at_path("question/short_title")
       end
     end
   end

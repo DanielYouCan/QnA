@@ -12,6 +12,7 @@ RSpec.describe Ability, type: :model do
     context 'REST API' do
       it { should be_able_to :create, :question }
       it { should be_able_to :me, User }
+      it { should be_able_to :create, :answer }
     end
   end
 
