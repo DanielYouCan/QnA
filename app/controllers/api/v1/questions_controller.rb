@@ -1,6 +1,6 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
-  authorize_resource
   before_action :find_question, only: :show
+  authorize_resource
 
   def index
     @questions = Question.all

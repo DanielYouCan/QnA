@@ -1,7 +1,7 @@
 class Api::V1::AnswersController < Api::V1::BaseController
-  authorize_resource
   before_action :find_answer, only: :show
   before_action :find_question, only: %i[index create]
+  authorize_resource
 
   def index
     respond_with(@question.answers)
