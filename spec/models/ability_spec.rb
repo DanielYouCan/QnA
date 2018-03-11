@@ -6,9 +6,7 @@ RSpec.describe Ability, type: :model do
   describe 'for guest' do
     let(:user) { nil }
 
-    it { should be_able_to :read, Question }
-    it { should be_able_to :read, Answer }
-    it { should be_able_to :read, Comment }
+    it { should be_able_to :read, :all }
     it { should_not be_able_to :manage, :all }
   end
 
@@ -31,6 +29,10 @@ RSpec.describe Ability, type: :model do
     it { should be_able_to :create, Question }
     it { should be_able_to :create, Answer }
     it { should be_able_to :create, Comment }
+
+    context 'REST API' do
+      it { should be_able_to :me, User }
+    end
 
     describe "User's ability to update resources" do
       it { should be_able_to :update, create(:question, user: user)}

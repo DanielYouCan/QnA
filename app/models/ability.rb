@@ -13,8 +13,12 @@ class Ability
     end
   end
 
-  def guest_abilities
+  def common_abilities
     can :read, :all
+  end
+
+  def guest_abilities
+    common_abilities
     can :set_email, User
     can :create_user, User
   end
@@ -24,7 +28,8 @@ class Ability
   end
 
   def user_abilities
-    can :read, :all
+    common_abilities
+    can :me, User
     can :create, [Question, Answer, Comment]
     can [:update, :destroy], [Question, Answer, Comment], user_id: user.id
 

@@ -5,7 +5,7 @@
 
 vote_question = ->
   $('.vote_question').bind 'ajax:success', (e) ->
-    question = $.parseJSON(e.detail[2].responseText)
+    question = $.parseJSON(e.detail[2].responseText).question
     $('.question_rating').html(question.rating)
     $(this).hide()
     $(this).next().children().first().html("Cancel vote").show()
@@ -15,7 +15,7 @@ vote_question = ->
 
 cancel_vote_question = ->
   $('.cancel_vote_question').bind 'ajax:success', (e) ->
-    question = $.parseJSON(e.detail[2].responseText)
+    question = $.parseJSON(e.detail[2].responseText).question
     $('.question_rating').html(question.rating)
     $(this).hide()
   .bind 'ajax:error', (e) ->

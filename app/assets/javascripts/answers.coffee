@@ -5,7 +5,7 @@
 
 vote = ->
   $('.vote').bind 'ajax:success', (e) ->
-    answer = $.parseJSON(e.detail[2].responseText)
+    answer = $.parseJSON(e.detail[2].responseText).answer
     $(".answer_#{answer.id}_rating").html(answer.rating)
     $(this).hide()
     $(this).next().children().first().html("Cancel vote").show()
@@ -16,7 +16,7 @@ vote = ->
 
 cancel_vote = ->
   $('.cancel_vote').bind 'ajax:success', (e) ->
-    answer = $.parseJSON(e.detail[2].responseText)
+    answer = $.parseJSON(e.detail[2].responseText).answer
     $(".answer_#{answer.id}_rating").html(answer.rating)
     $(this).hide()
   .bind 'ajax:error', (e) ->
@@ -43,7 +43,5 @@ $(document).on('turbolinks:load', ->
       @collection().append JST["templates/answer"](answer: $.parseJSON(data['answer']))
     }))
 
-$(document).ready(vote)
-$(document).ready(cancel_vote)
 $(document).on('turbolinks:load', vote)
 $(document).on('turbolinks:load', cancel_vote)
