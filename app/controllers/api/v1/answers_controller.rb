@@ -1,5 +1,5 @@
 class Api::V1::AnswersController < Api::V1::BaseController
-  authorize_resource class: false
+  authorize_resource
   before_action :find_answer, only: :show
   before_action :find_question, only: %i[index create]
 
@@ -12,7 +12,7 @@ class Api::V1::AnswersController < Api::V1::BaseController
   end
 
   def create
-    respond_with(answer = @question.answers.create(answer_params.merge(user: current_resource_owner)))
+    respond_with(@question.answers.create(answer_params.merge(user: current_resource_owner)))
   end
 
   private

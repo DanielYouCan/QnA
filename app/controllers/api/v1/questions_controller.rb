@@ -1,5 +1,5 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
-  authorize_resource class: false
+  authorize_resource
   before_action :find_question, only: :show
 
   def index

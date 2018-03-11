@@ -8,12 +8,6 @@ RSpec.describe Ability, type: :model do
 
     it { should be_able_to :read, :all }
     it { should_not be_able_to :manage, :all }
-
-    context 'REST API' do
-      it { should be_able_to :create, :question }
-      it { should be_able_to :me, User }
-      it { should be_able_to :create, :answer }
-    end
   end
 
   describe 'for admin' do
@@ -35,6 +29,10 @@ RSpec.describe Ability, type: :model do
     it { should be_able_to :create, Question }
     it { should be_able_to :create, Answer }
     it { should be_able_to :create, Comment }
+
+    context 'REST API' do
+      it { should be_able_to :me, User }
+    end
 
     describe "User's ability to update resources" do
       it { should be_able_to :update, create(:question, user: user)}
