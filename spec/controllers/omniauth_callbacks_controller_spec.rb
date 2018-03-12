@@ -7,32 +7,10 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
       request.env["omniauth.auth"] = mock_auth_hash_facebook
     end
 
-    context 'user is persisted and authorization is confirmed' do
-      let!(:user) { create(:user, email: "mock@mock.com") }
-      before { get :facebook }
+    let!(:user) { create(:user, email: "mock@mock.com") }
+    let(:provider) { "facebook" }
+    it_behaves_like "Oauthenticable"
 
-      it 'signs in user' do
-        expect(subject.current_user).to eq user
-      end
-
-      it 'sets flash message' do
-        expect(controller).to set_flash[:notice]
-      end
-    end
-
-    context 'user is persisted but authorization is not confirmed' do
-      let!(:user) { create(:user, email: "mock@mock.com") }
-      let!(:authorization) { create(:authorization, confirmed: false, provider: "facebook", uid: '123456', user: user ) }
-      before { get :facebook }
-
-      it 'redirects to login page' do
-        expect(response).to redirect_to new_user_session_path
-      end
-
-      it 'shows certain flash message' do
-        expect(controller).to set_flash[:notice]
-      end
-    end
   end
 
   describe 'GET/POST #twitter' do
@@ -41,33 +19,9 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
       request.env["omniauth.auth"] = mock_auth_hash_twitter
     end
 
-    context 'user is persisted and authorization is confirmed' do
-      let!(:user) { create(:user) }
-      let!(:authorization) { create(:authorization, provider: "twitter", uid: '123545', user: user ) }
-      before { get :facebook }
-
-      it 'signs in user' do
-        expect(subject.current_user).to eq user
-      end
-
-      it 'sets flash message' do
-        expect(controller).to set_flash[:notice]
-      end
-    end
-
-    context 'user is persisted but authorization is not confirmed' do
-      let!(:user) { create(:user) }
-      let!(:authorization) { create(:authorization, provider: "twitter", confirmed: false, uid: '123545', user: user ) }
-      before { get :facebook }
-
-      it 'redirects to login page' do
-        expect(response).to redirect_to new_user_session_path
-      end
-
-      it 'shows certain flash message' do
-        expect(controller).to set_flash[:notice]
-      end
-    end
+    let!(:user) { create(:user) }
+    let(:provider) { "twitter" }
+    it_behaves_like "Oauthenticable"
 
     context 'user is not persisted' do
       before { get :twitter }
