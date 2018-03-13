@@ -2,6 +2,7 @@
 require 'spec_helper'
 require 'capybara/email/rspec'
 require 'cancan/matchers'
+require 'sidekiq/testing'
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
