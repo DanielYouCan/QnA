@@ -10,6 +10,7 @@ Rails.application.routes.draw do
         patch :set_best
       end
     end
+    resources :subscribes, shallow: true, only: %i[create destroy]
   end
 
   namespace :api do

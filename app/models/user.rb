@@ -52,6 +52,10 @@ class User < ApplicationRecord
     authorizations.by_provider(provider, uid).first.confirmed?
   end
 
+  def subscribed_to_question?(question)
+    subscribes.by_question(question).present?
+  end
+
   private
 
   def self.create_user!(auth, email)

@@ -6,9 +6,9 @@ feature 'Author of question gets an email if new answer was added', %q{
   I want to be able to get updates on it
 } do
 
-  given(:user) { create(:user) }
-  given(:another_user) { create(:user) }
-  given(:question) { create(:question, user: user) }
+  given!(:user) { create(:user) }
+  given!(:another_user) { create(:user) }
+  given!(:question) { create(:question, user: user) }
 
   scenario 'Author gets am email when new answer is added', js: true do
     sign_in(another_user)
@@ -22,7 +22,7 @@ feature 'Author of question gets an email if new answer was added', %q{
     end
 
     open_email(user.email)
-    expect(current_email).to have_content 'New answer to question was added. View more here'
+    expect(current_email).to have_content "You got new answer for #{question.title}"
   end
 
   scenario 'Author unsubscribes from question' do
@@ -46,7 +46,7 @@ feature 'Author of question gets an email if new answer was added', %q{
 
       fill_in 'answer[body]', with: 'New answer'
       click_on 'Answer'
-      
+
       open_email(user.email)
       expect(current_email).to be_nil
     end
