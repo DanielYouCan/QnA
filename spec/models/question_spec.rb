@@ -7,6 +7,7 @@ RSpec.describe Question, type: :model do
 
   context 'assosiation' do
     it { should have_many(:answers).dependent(:destroy) }
+    it { should have_many(:subscribes).dependent(:destroy) }
   end
 
   context 'validation' do
@@ -43,4 +44,14 @@ RSpec.describe Question, type: :model do
       expect(another_question.best_answer).to eq(nil)
     end
   end
+
+  # describe 'subscribe author' do
+  #   subject { build(:question) }
+  #
+  #   it 'should create new subcribe' do
+  #     subject.save!
+  #     expect(subject.subscribes).to_not be_empty
+  #   end
+  #
+  # end
 end

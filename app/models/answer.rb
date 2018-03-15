@@ -7,7 +7,9 @@ class Answer < ApplicationRecord
   has_many :attachments, as: :attachable, dependent: :destroy
 
   validates :body, presence: true, length: { minimum: 5 }
+
   after_create :publish_answer
+  after_create :send_to_subscribers
 
   default_scope { order(best: :desc, created_at: :asc) }
   scope :best, -> { where(best: true) }
@@ -28,5 +30,10 @@ class Answer < ApplicationRecord
       "question:#{question_id}:answers",
         { answer: self.to_json(include: %i[user attachments]) }
     )
+  end
+
+  def send_to_subscribers
+    subscribers = Subscribe.find_subscribers(self.question)
+    NewAnswerEmailDistributionJob.perform_now(subscribers, self) if subscribers
   end
 end
