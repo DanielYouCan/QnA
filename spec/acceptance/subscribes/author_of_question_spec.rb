@@ -31,6 +31,7 @@ feature 'Author of question gets an email if new answer was added', %q{
 
     click_on 'Unsubscribe'
     expect(page).to have_content 'Subscribe'
+    expect(page).to have_content 'You have unsubscribed from the question'
   end
 
   context 'Unsubscribed author' do
@@ -38,9 +39,10 @@ feature 'Author of question gets an email if new answer was added', %q{
       sign_in(user)
       visit question_path(question)
       click_on 'Unsubscribe'
+      click_on 'Log out'
     end
 
-    scenario 'Unsubscribed author does not get an email' do
+    scenario 'Unsubscribed author does not get an email', js: true do
       sign_in(another_user)
       visit question_path(question)
 

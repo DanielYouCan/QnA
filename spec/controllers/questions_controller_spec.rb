@@ -144,4 +144,50 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
   end
+
+  describe "POST #subscribe" do
+    context 'user is not subscribed to the question' do
+      let(:user) { create(:user) }
+      before { sign_in(user) }
+
+      it 'creates subscribe' do
+        expect { post :subscribe, params: { id: question} }.to change(user.subscribes, :count).by(1)
+      end
+
+      it 'shows flash message' do
+        post :subscribe, params: { id: question}
+        expect(controller).to set_flash
+      end
+    end
+  end
+
+  describe "DELETE #unsubscribe" do
+    context 'user is author of the question' do
+      it 'deletes subscribe' do
+        sign_in(question.user)
+        expect { delete :unsubscribe, params: { id: question} }.to change(question.user.subscribes, :count).by(-1)
+      end
+
+      it 'shows flash message' do
+        delete :unsubscribe, params: { id: question }
+        expect(controller).to set_flash
+      end
+    end
+
+    context 'user does not subscribed' do
+      let(:user) { create(:user) }
+      before { sign_in(user) }
+
+      it 'deletes subscribe' do
+        post :subscribe, params: { id: question }
+        expect { delete :unsubscribe, params: { id: question} }.to change(user.subscribes, :count).by(-1)
+      end
+
+      it 'shows flash message' do
+        post :subscribe, params: { id: question }
+        delete :unsubscribe, params: { id: question }
+        expect(controller).to set_flash
+      end
+    end
+  end
 end

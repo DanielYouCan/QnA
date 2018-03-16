@@ -153,6 +153,20 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#subscribed_to_question?' do
+    let(:user) { create(:user) }
+    let(:question) { create(:question, user: user) }
+    let(:another_question) { create(:question) }
+
+    it 'returns true if user is subscribed' do
+      expect(user).to be_subscribed_to_question(question)
+    end
+
+    it 'returns false if user is not subscribed' do
+      expect(user).to_not be_subscribed_to_question(another_question)
+    end
+  end
+
   describe '#create_authorization' do
     let(:user) { create(:user) }
     let(:auth) { mock_auth_hash_twitter }

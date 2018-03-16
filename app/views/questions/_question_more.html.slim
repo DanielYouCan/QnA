@@ -5,12 +5,13 @@
     = @question.body
     |   |
     i= "Author: #{user_name(@question)}"
+    p
+      - if can? :subscribe, @question
+        = link_to 'Subscribe to question', subscribe_question_path(@question), method: :post
+      - if can? :unsubscribe, @question
+        = link_to 'Unsubscribe', unsubscribe_question_path(@question), method: :delete
     div class="question_rating rating"
       = @question.rating
-    - if !current_user.subscribed_to_question?(@question)
-      = link_to 'Subscribe to question', question_subscribes_path(@question), method: :post
-    - if current_user.subscribed_to_question?(@question)
-      = link_to 'Unsubscribe', subscribe_path(@subscribe), method: :delete
     - if can? :rating_up, @question
       = render 'shared/rating_links', resource: @question
     = render 'shared/cancel_vote', resource: @question

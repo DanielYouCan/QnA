@@ -1,11 +1,10 @@
 class Ability
   include CanCan::Ability
 
-  attr_reader :user, :question
+  attr_reader :user
 
-  def initialize(user, opts = {})
+  def initialize(user)
     @user = user
-    @question = opts[:question] if opts[:question]
 
     if user
       user.admin? ? admin_abilities : user_abilities
@@ -46,8 +45,12 @@ class Ability
       votable.votes.where(user: user).present?
     end
 
-    can :create, Subscribe unless user.subscribed_to_question?(question)
+    can [:subscribe], Question do |question|
+      !user.subscribed_to_question?(question)
+    end
 
-    can :destroy, Subscribe if user.subscribed_to_question?(question)
+    can [:unsubscribe], Question do |question|
+      user.subscribed_to_question?(question)
+    end
   end
 end
