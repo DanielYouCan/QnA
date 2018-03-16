@@ -11,8 +11,6 @@ class QuestionsController < ApplicationController
 
   respond_to :js, only: :update
   authorize_resource
-  skip_authorization_check only: %i[subscribe unsubscribe]
-  skip_authorize_resource only: %i[subscribe unsubscribe]
 
   def index
     respond_with(@questions = Question.all)
