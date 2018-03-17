@@ -31,7 +31,7 @@ RSpec.describe Answer, type: :model do
     subject { build(:answer, question: question) }
 
     it 'should send answer to subscribers' do
-      expect(NewAnswerEmailDistributionJob).to receive(:perform_now).with(subscribers, subject)
+      expect(NewAnswerEmailDistributionJob).to receive(:perform_later).with(subject.question, subject)
       subject.save!
     end
   end

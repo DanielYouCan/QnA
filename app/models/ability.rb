@@ -1,7 +1,7 @@
 class Ability
   include CanCan::Ability
 
-  attr_reader :user
+  attr_reader :user, :question
 
   def initialize(user)
     @user = user
@@ -43,14 +43,6 @@ class Ability
 
     can [:cancel_vote], Votable do |votable|
       votable.votes.where(user: user).present?
-    end
-
-    can [:subscribe], Question do |question|
-      !user.subscribed_to_question?(question)
-    end
-
-    can [:unsubscribe], Question do |question|
-      user.subscribed_to_question?(question)
     end
   end
 end

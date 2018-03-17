@@ -5,15 +5,12 @@ Rails.application.routes.draw do
   root to: "questions#index"
 
   resources :questions do
-    member do
-      post :subscribe
-      delete :unsubscribe
-    end
     resources :answers, only: %i[create destroy update], shallow: true do
       member do
         patch :set_best
       end
     end
+    resources :subscribes, shallow: true, only: %i[create destroy]
   end
 
   namespace :api do

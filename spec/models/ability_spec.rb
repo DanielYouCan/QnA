@@ -73,23 +73,5 @@ RSpec.describe Ability, type: :model do
       it { should be_able_to :cancel_vote, question_with_votes }
       it { should_not be_able_to :cancel_vote, another_question }
     end
-
-    describe "User's ability to create and destroy subscribes" do
-      subject(:ability) { Ability.new(user) }
-
-      let(:user) { create(:user) }
-      let(:question) { create(:question) }
-
-      it { should be_able_to :subscribe, question }
-      it { should_not be_able_to :unsubscribe, question }
-
-      context "user can't subscribe" do
-        let!(:subsribe) { create(:subscribe, user: user, question: question) }
-
-        it { should_not be_able_to :subscribe, question }
-        it { should be_able_to :unsubscribe, question }
-      end
-    end
-
   end
 end

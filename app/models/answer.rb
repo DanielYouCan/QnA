@@ -33,7 +33,6 @@ class Answer < ApplicationRecord
   end
 
   def send_to_subscribers
-    subscribers = Subscribe.find_subscribers(self.question)
-    NewAnswerEmailDistributionJob.perform_now(subscribers, self) if subscribers
+    NewAnswerEmailDistributionJob.perform_later(self.question, self)
   end
 end

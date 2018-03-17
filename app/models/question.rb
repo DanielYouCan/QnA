@@ -5,6 +5,7 @@ class Question < ApplicationRecord
   has_many :answers, dependent: :destroy
   has_many :attachments, as: :attachable, dependent: :destroy
   has_many :subscribes, dependent: :destroy
+  has_many :subscribers, through: :subscribes, source: :user
   belongs_to :user
 
   validates :body, :title, presence: true, length: { minimum: 5 }

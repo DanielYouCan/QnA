@@ -5,8 +5,7 @@ class QuestionsController < ApplicationController
   before_action :set_question, only: %i[show update destroy subscribe unsubscribe]
   before_action :gon_question_author, only: :show
   before_action :build_answer, only: :show
-  before_action :current_ability, only: :show
-  before_action :find_subscribe, only: :unsubscribe
+  before_action :find_subscribe, only: :show
   after_action :publish_question, only: :create
 
   respond_to :js, only: :update
@@ -35,16 +34,6 @@ class QuestionsController < ApplicationController
 
   def destroy
     respond_with(@question.destroy)
-  end
-
-  def subscribe
-    @question.subscribes.create(user: current_user)
-    redirect_to @question, notice: 'You have subscribed to the question'
-  end
-
-  def unsubscribe
-    @subscribe.destroy
-    redirect_to @question, notice: 'You have unsubscribed from the question'
   end
 
   private

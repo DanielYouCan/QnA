@@ -6,10 +6,10 @@
     |   |
     i= "Author: #{user_name(@question)}"
     p
-      - if can? :subscribe, @question
-        = link_to 'Subscribe to question', subscribe_question_path(@question), method: :post
-      - if can? :unsubscribe, @question
-        = link_to 'Unsubscribe', unsubscribe_question_path(@question), method: :delete
+      - if current_user && @subscribe.nil?
+        = link_to 'Subscribe to question', question_subscribes_path(@question), method: :post
+      - if @subscribe
+        = link_to 'Unsubscribe', subscribe_path(@subscribe), method: :delete
     div class="question_rating rating"
       = @question.rating
     - if can? :rating_up, @question

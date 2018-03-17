@@ -9,6 +9,7 @@ RSpec.describe User, type: :model do
     it { should have_many(:comments) }
     it { should have_many(:authorizations).dependent(:destroy) }
     it { should have_many(:subscribes).dependent(:destroy) }
+    it { should have_many(:subscribed_questions) }
   end
 
   context 'validation' do
