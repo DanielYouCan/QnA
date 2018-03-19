@@ -1,22 +1,20 @@
 class SubscribesController < ApplicationController
   before_action :find_question, only: :create
   before_action :set_subscribe, only: :destroy
-  skip_authorization_check
+
+  authorize_resource only: :destroy
 
   def create
-    if !current_user.subscribed_to_question?(@question)
-      @question.subscribes.create(user: current_user)
-      redirect_to @question, notice: "You have subscribed to the question"
-    end
+    authorize! :subscribe, @question
+    @question.subscribes.create(user: current_user)
+    redirect_to @question, notice: "You have subscribed to the question"
   end
 
   def destroy
     question = @subscribe.question
 
-    if current_user.subscribed_to_question?(question)
-      @subscribe.destroy
-      redirect_to question, notice: "You have unsubscribed from the question"
-    end
+    @subscribe.destroy
+    redirect_to question, notice: "You have unsubscribed from the question"
   end
 
   private

@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   include Voted
 
   before_action :authenticate_user!, except: %i[index show]
-  before_action :set_question, only: %i[show update destroy subscribe unsubscribe]
+  before_action :set_question, only: %i[show update destroy]
   before_action :gon_question_author, only: :show
   before_action :build_answer, only: :show
   before_action :find_subscribe, only: :show
