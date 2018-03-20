@@ -5,6 +5,7 @@ class QuestionsController < ApplicationController
   before_action :set_question, only: %i[show update destroy]
   before_action :gon_question_author, only: :show
   before_action :build_answer, only: :show
+  before_action :find_subscribe, only: :show
   after_action :publish_question, only: :create
 
   respond_to :js, only: :update
@@ -43,6 +44,10 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Question.find(params[:id])
+  end
+
+  def find_subscribe
+    @subscribe = @question.subscribes.where(user: current_user).first
   end
 
   def build_answer

@@ -8,6 +8,8 @@ RSpec.describe User, type: :model do
     it { should have_many(:votes) }
     it { should have_many(:comments) }
     it { should have_many(:authorizations).dependent(:destroy) }
+    it { should have_many(:subscribes).dependent(:destroy) }
+    it { should have_many(:subscribed_questions) }
   end
 
   context 'validation' do
@@ -149,6 +151,20 @@ RSpec.describe User, type: :model do
       it 'creates new user' do
         expect { User.create_user_for_network!(params, session) }.to change(User, :count).by(1)
       end
+    end
+  end
+
+  describe '#subscribed_to_question?' do
+    let(:user) { create(:user) }
+    let(:question) { create(:question, user: user) }
+    let(:another_question) { create(:question) }
+
+    it 'returns true if user is subscribed' do
+      expect(user).to be_subscribed_to_question(question)
+    end
+
+    it 'returns false if user is not subscribed' do
+      expect(user).to_not be_subscribed_to_question(another_question)
     end
   end
 

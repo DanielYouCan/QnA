@@ -15,11 +15,11 @@ end
 shared_examples_for "API Showable" do |attributes|
   context 'authorized' do
     let(:access_token) { create(:access_token) }
-    let(:type) { resource.class.name.downcase }
-    let!(:comments) { create_list(:comment, 2, commentable: resource) }
-    let!(:attachments) { create_list(:attachment, 3, attachable: resource) }
+    let(:type) { subject.class.name.downcase }
+    let!(:comments) { create_list(:comment, 2, commentable: subject) }
+    let!(:attachments) { create_list(:attachment, 3, attachable: subject) }
 
-    before { get "/api/v1/#{type.pluralize}/#{resource.id}", params: { format: :json, access_token: access_token.token } }
+    before { get "/api/v1/#{type.pluralize}/#{subject.id}", params: { format: :json, access_token: access_token.token } }
 
     it 'returns 200 status code' do
       expect(response).to be_success
@@ -27,7 +27,7 @@ shared_examples_for "API Showable" do |attributes|
 
     attributes.each do |attr|
       it "object contains #{attr}" do
-        expect(response.body).to be_json_eql(resource.send(attr.to_sym).to_json).at_path("#{type}/#{attr}")
+        expect(response.body).to be_json_eql(subject.send(attr.to_sym).to_json).at_path("#{type}/#{attr}")
       end
     end
 

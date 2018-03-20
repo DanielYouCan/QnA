@@ -24,4 +24,15 @@ RSpec.describe Answer, type: :model do
       expect(previous_best_answer.reload).to_not be_best
     end
   end
+
+  describe 'send to subscribers' do
+    let!(:question) { create(:question) }
+    let!(:subscribers) { User.find(question.subscribes.pluck(:user_id)) }
+    subject { build(:answer, question: question) }
+
+    it 'should send answer to subscribers' do
+      expect(NewAnswerEmailDistributionJob).to receive(:perform_later).with(subject.question, subject)
+      subject.save!
+    end
+  end
 end

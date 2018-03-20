@@ -58,6 +58,7 @@ RSpec.describe Ability, type: :model do
       it { should be_able_to :set_best, create(:answer, question: question) }
       it { should_not be_able_to :set_best, create(:answer, question: another_question) }
     end
+
     describe "User's ability to vote for or against resource" do
       it { should be_able_to [:rating_up, :rating_down], create(:answer, user: other) }
       it { should_not be_able_to [:rating_up, :rating_down], create(:answer, user: user) }
@@ -71,6 +72,23 @@ RSpec.describe Ability, type: :model do
 
       it { should be_able_to :cancel_vote, question_with_votes }
       it { should_not be_able_to :cancel_vote, another_question }
+    end
+
+    describe "User's ability to subscribe and unsubscribe to/from questions" do
+      subject(:ability) { Ability.new(user) }
+
+      let(:user) { create(:user) }
+      let(:question) { create(:question) }
+
+      it { should be_able_to :subscribe, question }
+      it { should_not be_able_to :destroy, create(:subscribe) }
+
+      context "user can't subscribe" do
+        let!(:subsribe) { create(:subscribe, user: user, question: question) }
+
+        it { should_not be_able_to :subscribe, question }
+        it { should be_able_to :destroy, subsribe }
+      end
     end
 
   end

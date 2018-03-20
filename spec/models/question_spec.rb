@@ -7,6 +7,8 @@ RSpec.describe Question, type: :model do
 
   context 'assosiation' do
     it { should have_many(:answers).dependent(:destroy) }
+    it { should have_many(:subscribes).dependent(:destroy) }
+    it { should have_many(:subscribers) }
   end
 
   context 'validation' do
@@ -42,5 +44,19 @@ RSpec.describe Question, type: :model do
     it "should return nil if question doesn't have best answer" do
       expect(another_question.best_answer).to eq(nil)
     end
+  end
+
+  describe 'subscribe author' do
+    subject { build(:question) }
+
+    it 'should create new subcribe' do
+      expect { subject.save! }.to change(subject.subscribes, :count).by(1)
+    end
+
+    it 'should subscribe author of the question' do
+      subject.save!
+      expect(subject.subscribers.first).to eq subject.user
+    end
+
   end
 end

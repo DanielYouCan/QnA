@@ -1,0 +1,6 @@
+<p>Hi, <%= @subscriber.username %>!</p>
+
+<p> You got new answer for <%= link_to @question.title.truncate(10), question_url(@question) %> </p>
+
+<b> <%= @user.username %> wrote: </b>
+<p> <%= @answer.body.truncate(30) %> </p>

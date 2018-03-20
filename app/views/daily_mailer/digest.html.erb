@@ -1,0 +1,7 @@
+<p>Hi, <%= @user.username %>!</p>
+
+<b> Here is the daily digest for <%= Date.today %> : </b>
+
+<% @questions.each do |question| %>
+  <li> <%= link_to question.title.truncate(10), question_url(question) %> </li>
+<% end %>

@@ -32,7 +32,7 @@ RSpec.describe 'Answers API', type: 'request' do
   end
 
   describe 'GET /show' do
-    let(:resource) { create(:answer) }
+    subject { build(:answer) }
     it_behaves_like 'API Authenticable'
     it_behaves_like 'API Showable', %w(id body created_at updated_at question_id)
 
