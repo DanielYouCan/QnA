@@ -15,6 +15,7 @@ class Ability
 
   def common_abilities
     can :read, :all
+    can :execute, :search
   end
 
   def guest_abilities
