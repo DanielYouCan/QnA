@@ -39,10 +39,7 @@ Rails.application.routes.draw do
 
   get :set_authorization_confirmed, to: 'authorizations#set_confirmed'
 
-  namespace :search do
-    get :new
-    get :execute
-  end
+  get :search, to: 'search#search'
 
   namespace :users do
     get :set_email

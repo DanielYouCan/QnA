@@ -1,7 +1,6 @@
 - if gon.user_id != @answer.user_id
   div class='answer_#{@answer.id} answer'
-    b= @answer.body
-    |   |
+    b=> @answer.body
     i= "Author: #{@answer.user.username}"
     div class="answer_#{@answer.id}_rating rating"
       = @answer.rating

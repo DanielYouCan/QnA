@@ -1,8 +1,8 @@
 class SearchController < ApplicationController
   skip_before_action :authenticate_user!
 
-  def execute
-    authorize! :execute, :search
+  def search
+    authorize! :do, :search
     if SearchFormValidator.new(search_params).valid?
       @results = Search.search_handler(search_params)
     else

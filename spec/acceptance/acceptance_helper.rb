@@ -6,6 +6,7 @@ RSpec.configure do |config|
   Capybara.server = :puma
 
   config.include AcceptanceHelper, type: :feature
+  config.include SphinxHelpers, type: :feature
 
   config.use_transactional_fixtures = false
 
@@ -40,6 +41,14 @@ RSpec.configure do |config|
       # specs, so use truncation strategy.
       DatabaseCleaner.strategy = :truncation
     end
+  end
+
+  config.before(:suite) do
+    # Ensure sphinx directories exist for the test environment
+      ThinkingSphinx::Test.init
+      # Configure and start Sphinx, and automatically
+      # stop Sphinx at the end of the test suite.
+      ThinkingSphinx::Test.start_with_autostop
   end
 
   config.before(:each, js: true) do

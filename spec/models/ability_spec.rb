@@ -8,7 +8,7 @@ RSpec.describe Ability, type: :model do
 
     it { should be_able_to :read, :all }
     it { should_not be_able_to :manage, :all }
-    it { should be_able_to :execute, :search }
+    it { should be_able_to :do, :search }
   end
 
   describe 'for admin' do
@@ -36,7 +36,7 @@ RSpec.describe Ability, type: :model do
     end
 
     context 'search' do
-      it { should be_able_to :execute, :search }
+      it { should be_able_to :do, :search }
     end
 
     describe "User's ability to update resources" do

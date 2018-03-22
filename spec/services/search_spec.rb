@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe 'Search class' do
   describe '#search_handler' do
     let!(:question) { create(:question, title: "SphinxTest") }
-    let!(:answer) { create(:answer, body: "SphinxTest") }
     let!(:search_all) { { search_object: "All", search_body: question.title } }
     let!(:search_questions) { { search_object: "Questions", search_body: question.title } }
 
