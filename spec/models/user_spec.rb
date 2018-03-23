@@ -128,14 +128,6 @@ RSpec.describe User, type: :model do
       "email" => nil } }
     }
 
-    context 'Email is blank' do
-      let(:params) { { email: '' } }
-
-      it 'returns false' do
-        expect(User.create_user_for_network!(params, session)).to eq false
-      end
-    end
-
     context 'User with given email exists' do
       let(:user) { create(:user) }
       let(:params) { { email: user.email } }

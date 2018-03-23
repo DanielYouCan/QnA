@@ -30,7 +30,6 @@ class User < ApplicationRecord
   end
 
   def self.create_user_for_network!(params, session)
-    return false unless params[:email].present?
     user = User.where(params).first
     auth = OmniAuth::AuthHash.new(session)
     return user.create_unconfirmed_authorization(auth) if user

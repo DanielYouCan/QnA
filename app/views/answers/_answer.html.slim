@@ -1,7 +1,6 @@
 - if answer.persisted?
   div class='answer_#{answer.id} answer'
-    b= answer.body
-    |   |
+    b=> answer.body
     i= "Author: #{user_name(answer)}"
     div class="answer_#{answer.id}_rating rating"
       = answer.rating
