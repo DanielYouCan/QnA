@@ -3,8 +3,10 @@ class SearchController < ApplicationController
 
   def search
     authorize! :do, :search
-    if SearchFormValidator.new(search_params).valid?
-      @results = Search.search_handler(search_params)
+    search = Search.new(search_params)
+
+    if search.valid?
+      @results = search.search_handler
     else
       redirect_to root_path
     end

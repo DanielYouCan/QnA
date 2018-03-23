@@ -8,12 +8,12 @@ RSpec.describe 'Search class' do
 
     it 'calls ThinkingSphinx.search method' do
       expect(ThinkingSphinx).to receive(:search).with(search_all[:search_body])
-      Search.search_handler(search_all)
+      Search.new(search_all).search_handler
     end
 
     it 'calls Question.search method' do
       expect(Question).to receive(:search).with(search_questions[:search_body])
-      Search.search_handler(search_questions)
+      Search.new(search_questions).search_handler
     end
   end
 end
