@@ -7,7 +7,7 @@ RSpec.describe Question, type: :model do
 
   context 'assosiation' do
     it { should have_many(:answers).dependent(:destroy) }
-    it { should have_many(:subscribes).dependent(:destroy) }
+    it { should have_many(:subscriptions).dependent(:destroy) }
     it { should have_many(:subscribers) }
   end
 
@@ -50,7 +50,7 @@ RSpec.describe Question, type: :model do
     subject { build(:question) }
 
     it 'should create new subcribe' do
-      expect { subject.save! }.to change(subject.subscribes, :count).by(1)
+      expect { subject.save! }.to change(subject.subscriptions, :count).by(1)
     end
 
     it 'should subscribe author of the question' do

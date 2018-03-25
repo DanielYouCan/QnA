@@ -2,7 +2,7 @@ require_relative 'jobs_helper'
 
 RSpec.describe NewAnswerEmailDistributionJob, type: :job do
   let!(:question) { create(:question) }
-  let!(:subscribes) { create_list(:subscribe, 3, question: question) }
+  let!(:subscriptions) { create_list(:subscription, 3, question: question) }
   let!(:answer) { create(:answer, question: question) }
 
   it "matches with enqueued job" do

@@ -2,13 +2,10 @@ shared_examples_for "searchable" do
   %w(Questions Answers Comments).each do |type|
     scenario "tries to search #{type}", js: true do
       ThinkingSphinx::Test.run do
-        visit questions_path
 
-        within '.search' do
-          fill_in 'search_body', with: 'Body'
-          select type, from: 'search_object'
-          click_on 'Search'
-        end
+        fill_in 'search_body', with: 'Body'
+        select type, from: 'search_object'
+        click_on 'Search'
 
         expect(page).to have_content 'test body'
       end
@@ -18,11 +15,9 @@ shared_examples_for "searchable" do
   scenario 'tries to search users', js: true do
     ThinkingSphinx::Test.run do
 
-      within '.search' do
-        fill_in 'search_body', with: user.username
-        select 'Users', from: 'search_object'
-        click_on 'Search'
-      end
+      fill_in 'search_body', with: user.username
+      select 'Users', from: 'search_object'
+      click_on 'Search'
 
       expect(page).to have_content(user.username)
     end
@@ -31,11 +26,9 @@ shared_examples_for "searchable" do
   scenario 'tries to search all', js: true do
     ThinkingSphinx::Test.run do
 
-      within '.search' do
-        fill_in 'search_body', with: 'test body'
-        select 'All', from: 'search_object'
-        click_on 'Search'
-      end
+      fill_in 'search_body', with: 'test body'
+      select 'All', from: 'search_object'
+      click_on 'Search'
 
       expect(page).to have_content(comment.body)
       expect(page).to have_content(question.title)

@@ -5,10 +5,10 @@
     br
     = @question.body
     p
-      - if current_user && @subscribe.nil?
-        = link_to 'Subscribe to question', question_subscribes_path(@question), method: :post
-      - if @subscribe
-        = link_to 'Unsubscribe', subscribe_path(@subscribe), method: :delete
+      - if current_user && @subscription.nil?
+        = link_to 'Subscribe to question', question_subscriptions_path(@question), method: :post
+      - if @subscription
+        = link_to 'Unsubscribe', subscription_path(@subscription), method: :delete
     div class="question_rating rating"
       = @question.rating
     - if can? :rating_up, @question

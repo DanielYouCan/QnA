@@ -50,8 +50,8 @@ class Ability
       !user.subscribed_to_question?(question)
     end
 
-    can :destroy, Subscribe do |subscribe|
-      user.subscribed_to_question?(subscribe.question)
+    can :destroy, Subscription do |subscription|
+      user.subscribed_to_question?(subscription.question)
     end
   end
 end

@@ -27,7 +27,6 @@ RSpec.describe Answer, type: :model do
 
   describe 'send to subscribers' do
     let!(:question) { create(:question) }
-    let!(:subscribers) { User.find(question.subscribes.pluck(:user_id)) }
     subject { build(:answer, question: question) }
 
     it 'should send answer to subscribers' do

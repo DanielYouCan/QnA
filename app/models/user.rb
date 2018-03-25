@@ -4,8 +4,8 @@ class User < ApplicationRecord
   has_many :votes
   has_many :comments
   has_many :authorizations, dependent: :destroy
-  has_many :subscribes, dependent: :destroy
-  has_many :subscribed_questions, through: :subscribes, source: :question
+  has_many :subscriptions, dependent: :destroy
+  has_many :subscribed_questions, through: :subscriptions, source: :question
 
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: %i[facebook twitter]
@@ -53,7 +53,7 @@ class User < ApplicationRecord
   end
 
   def subscribed_to_question?(question)
-    subscribes.by_question(question).present?
+    subscriptions.by_question(question).present?
   end
 
   private
