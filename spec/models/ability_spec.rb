@@ -86,13 +86,13 @@ RSpec.describe Ability, type: :model do
       let(:question) { create(:question) }
 
       it { should be_able_to :subscribe, question }
-      it { should_not be_able_to :destroy, create(:subscribe) }
+      it { should_not be_able_to :destroy, create(:subscription) }
 
       context "user can't subscribe" do
-        let!(:subsribe) { create(:subscribe, user: user, question: question) }
+        let!(:subscription) { create(:subscription, user: user, question: question) }
 
         it { should_not be_able_to :subscribe, question }
-        it { should be_able_to :destroy, subsribe }
+        it { should be_able_to :destroy, subscription }
       end
     end
 

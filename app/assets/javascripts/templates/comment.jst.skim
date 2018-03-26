@@ -1,3 +1,6 @@
 - if gon.user_id != @comment.user_id
   div class="comment_#{@comment.id} comment"
     = @comment.body
+    span.text-primary= " - #{(@comment.user.username)}"
+    span.text-secondary= " #{@comment.created_at.slice(0,10)} at #{@comment.created_at.slice(11,16)}"
+  hr

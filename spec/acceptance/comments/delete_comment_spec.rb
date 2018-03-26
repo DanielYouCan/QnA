@@ -17,7 +17,7 @@ feature 'User deletes his/her comment', %q{
     visit question_path(question)
 
     within ".answer_#{answer.id}" do
-      click_on 'Delete comment'
+      click_on 'delete comment'
       expect(page).to_not have_content comment.body
     end
   end
@@ -26,13 +26,13 @@ feature 'User deletes his/her comment', %q{
     sign_in(another_user)
     visit question_path(question)
     within ".answer_#{answer.id}" do
-      expect(page).to_not have_link 'Delete comment'
+      expect(page).to_not have_link 'delete comment'
     end
   end
 
   scenario 'Guest user tries to delete comment' do
     visit question_path(question)
 
-    expect(page).to_not have_link 'Delete comment'
+    expect(page).to_not have_link 'delete comment'
   end
 end

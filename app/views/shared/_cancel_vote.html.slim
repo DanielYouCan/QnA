@@ -4,4 +4,4 @@ div class="#{classname}"
   a class="mock-link" data-remote="true" rel="nofollow" data-method="patch"
 
   - if can? :cancel_vote, resource
-    = link_to 'Cancel vote', polymorphic_path(resource, action: :cancel_vote), method: :patch, remote: true
+    = link_to 'cancel vote', polymorphic_path(resource, action: :cancel_vote), method: :patch, remote: true

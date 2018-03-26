@@ -14,7 +14,7 @@ feature 'Answer editing', %q{
   scenario 'Guest tries to edit answer' do
     visit question_path(question)
 
-    expect(page).to_not have_link 'Edit'
+    expect(page).to_not have_link 'edit'
   end
 
   scenario 'tries to edit someone else answer' do
@@ -22,7 +22,7 @@ feature 'Answer editing', %q{
     visit question_path(question)
 
     within '.answers' do
-      expect(page).to_not have_link 'Edit'
+      expect(page).to_not have_link 'edit'
     end
   end
 
@@ -34,15 +34,15 @@ feature 'Answer editing', %q{
 
     scenario 'sees link edit' do
       within '.answers' do
-        expect(page).to have_link 'Edit'
+        expect(page).to have_link 'edit'
       end
     end
 
     scenario 'tries to edit his/her answer', js: true do
-      click_on 'Edit'
+      click_on 'edit'
       within '.answers' do
         fill_in 'Answer', with: 'edited answer'
-        click_on 'Update Answer'
+        click_on 'Update answer'
 
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'edited answer'
@@ -51,10 +51,10 @@ feature 'Answer editing', %q{
     end
 
     scenario 'invalid attributes for answer', js: true do
-      click_on 'Edit'
+      click_on 'edit'
       within '.answers' do
         fill_in 'Answer', with: ''
-        click_on 'Update Answer'
+        click_on 'Update answer'
 
         expect(page).to have_content answer.body
         expect(page).to have_content "Body can't be blank"

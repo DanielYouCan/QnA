@@ -11,7 +11,7 @@ feature 'User adds comment to a question', %q{
 
   scenario 'Guest tries to add comennt' do
     visit question_path(question)
-    expect(page).to_not have_link 'Add comment'
+    expect(page).to_not have_link 'add a comment'
   end
 
   context 'Authenticated user' do
@@ -22,13 +22,13 @@ feature 'User adds comment to a question', %q{
 
     scenario 'User sees link to add comment' do
       within ".question" do
-        expect(page).to have_link 'Add comment'
+        expect(page).to have_link 'add a comment'
       end
     end
 
     scenario 'User adds comment', js: true do
       within ".question" do
-        click_on 'Add comment'
+        click_on 'add a comment'
         fill_in 'create_comment_body', with: 'new comment'
         click_on 'Comment'
 
@@ -38,7 +38,7 @@ feature 'User adds comment to a question', %q{
 
     scenario 'Invalid attributes for comment', js: true do
       within ".question" do
-        click_on 'Add comment'
+        click_on 'add a comment'
         click_on 'Comment'
 
         expect(page).to have_content "Body can't be blank"
@@ -59,7 +59,7 @@ feature 'User adds comment to a question', %q{
 
       Capybara.using_session('user') do
         within ".question" do
-          click_on 'Add comment'
+          click_on 'add a comment'
           fill_in 'create_comment_body', with: 'new comment'
           click_on 'Comment'
 

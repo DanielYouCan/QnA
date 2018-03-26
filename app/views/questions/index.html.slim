@@ -1,6 +1,6 @@
 - if can? :create, Question
-  p= link_to 'Ask question', new_question_path
-= render 'search/form'
+  p
+    =link_to 'Ask question', new_question_path, class: "btn btn-info btn-lg new_question"
 h1= 'Questions list'
 br
 .questions_list

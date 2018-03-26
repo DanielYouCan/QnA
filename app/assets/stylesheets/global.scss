@@ -2,7 +2,8 @@
 .edit_question,
 .edit_comment,
 .new_comment,
-.mock-link
+.mock-link,
+.hide-link
  {
   display: none;
 }
@@ -21,25 +22,25 @@
   padding-left: 15px;
   margin-top: 5px;
   padding-bottom: 5px;
-  width: 60%;
-  border: 1px solid $indigo;
-  border-radius: 10px;
+  width: 70%;
 }
 
 .comment {
-  border: 1px solid $teal;
-  width: 85%;
+  width: 80%;
   padding-left: 15px;
-  padding-bottom: 5px;
 }
 
 .question {
   padding-left: 15px;
   margin-top: 5px;
   padding-bottom: 5px;
-  width: 60%;
-  border: 1px solid $cyan;
-  border-radius: 10px;
+  width: 70%;
+}
+
+.info {
+  padding: 10px;
+  width: 45%;
+  background-color: #B0E0E6
 }
 
 .rating {
@@ -47,15 +48,23 @@
   width: 35px;
   border: 2px solid red;
   border-radius: 20px;
+  margin-top: 5px;
 }
 
-.search {
-  position: absolute;
-  right: 50px;
+.new_question {
+  margin-top: 5px;
+}
+
+.new-answer-form {
+  padding-left: 10px;
+  margin-bottom: 5px;
+  width: 70%;
+}
+
+.custom-select {
+  width: 150px;
 }
 
 .result {
   width: 75%;
-  margin-top: 5px;
-  border: 1px solid $cyan;
 }

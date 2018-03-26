@@ -1,17 +1,14 @@
 nav class="navbar navbar-dark bg-dark navbar-expand-lg"
+  = link_to "QnA", root_path, class: 'navbar-brand'
+  = render 'search/form'
 
   div class="collapse navbar-collapse"
-    = link_to "QnA", root_path, class: 'navbar-brand'
-    - if user_signed_in?
-        ul class="navbar-nav mr-auto"
-          li class="nav-item active"
-            = link_to 'New question', new_question_path, class: 'nav-link'
 
   span class="navbar-text"
     - if user_signed_in?
-      b= greeting
-      |   | 
-      = link_to 'Log out', destroy_user_session_path, method: :delete
+      b=> greeting
+      |   |
+      =< link_to 'Log out', destroy_user_session_path, method: :delete
     - else
       = link_to 'Register', new_user_registration_path
       b |

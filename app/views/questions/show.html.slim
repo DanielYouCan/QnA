@@ -1,9 +1,9 @@
 = render 'question_more'
 br
-b Answers:
+h2 Answers
+hr
 div class="answers" data-question-id="#{@question.id}"
   = render @question.answers
-br
 - if user_signed_in?
   .answers-errors
   = render 'answers/form'

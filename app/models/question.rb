@@ -4,8 +4,8 @@ class Question < ApplicationRecord
 
   has_many :answers, dependent: :destroy
   has_many :attachments, as: :attachable, dependent: :destroy
-  has_many :subscribes, dependent: :destroy
-  has_many :subscribers, through: :subscribes, source: :user
+  has_many :subscriptions, dependent: :destroy
+  has_many :subscribers, through: :subscriptions, source: :user
   belongs_to :user
 
   validates :body, :title, presence: true, length: { minimum: 5 }
@@ -27,6 +27,6 @@ class Question < ApplicationRecord
   private
 
   def subscribe_author
-    subscribes.create!(user: self.user)
+    subscriptions.create!(user: self.user)
   end
 end

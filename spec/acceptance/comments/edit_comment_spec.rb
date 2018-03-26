@@ -15,7 +15,7 @@ feature 'User edits his/her comment', %q{
   scenario 'Guest tries to edit comment' do
     visit question_path(question)
 
-    expect(page).to_not have_link 'Edit comment'
+    expect(page).to_not have_link 'edit comment'
   end
 
   scenario 'tries to edit someone else answer' do
@@ -23,7 +23,7 @@ feature 'User edits his/her comment', %q{
     visit question_path(question)
 
     within ".answer_#{answer.id}" do
-      expect(page).to_not have_link 'Edit comment'
+      expect(page).to_not have_link 'edit comment'
     end
   end
 
@@ -35,16 +35,16 @@ feature 'User edits his/her comment', %q{
 
     scenario 'sees link edit' do
       within ".answer_#{answer.id}" do
-        expect(page).to have_link 'Edit comment'
+        expect(page).to have_link 'edit comment'
       end
     end
 
     scenario 'tries to edit his/her comment', js: true do
       within ".answer_#{answer.id}" do
-        click_on 'Edit comment'
+        click_on 'edit comment'
 
         fill_in 'Comment', with: 'updated comment'
-        click_on 'Comment'
+        click_on 'Update'
         expect(page).to have_content 'updated comment'
         expect(page).to_not have_content comment.body
         expect(page).to_not have_selector 'textarea'
@@ -53,10 +53,10 @@ feature 'User edits his/her comment', %q{
 
     scenario 'invalid attributes for comment', js: true do
       within ".answer_#{answer.id}" do
-        click_on 'Edit comment'
+        click_on 'edit comment'
 
         fill_in 'Comment', with: ''
-        click_on 'Comment'
+        click_on 'Update'
         expect(page).to have_content comment.body
         expect(page).to have_selector 'textarea'
         expect(page).to have_content "Body can't be blank"

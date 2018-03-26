@@ -7,12 +7,16 @@ module ApplicationHelper
     FLASH_CLASS[key]
   end
 
-  def user_name(resource)
+  def author(resource)
     resource.user.username
   end
 
   def greeting
     greeting = "Hello, " + content_tag(:b, current_user.username)
     greeting.html_safe
+  end
+
+  def created_date(resource)
+    resource.created_at.strftime("%B %e '%Y at %I:%M %p")
   end
 end

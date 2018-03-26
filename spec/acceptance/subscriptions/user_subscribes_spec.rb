@@ -1,6 +1,6 @@
 require_relative '../acceptance_helper'
 
-feature 'User subscribes question', %q{
+feature 'User subscribes to question', %q{
   In order to get updates on answers
   As an user
   I want to be able to subscribe to questions
