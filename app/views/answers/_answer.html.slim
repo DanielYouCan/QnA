@@ -1,7 +1,10 @@
 - if answer.persisted?
   div class='answer_#{answer.id} answer'
-    b=> answer.body
-    i= "Author: #{user_name(answer)}"
+    .info
+      i= "Author: #{author(answer)}"
+      br
+      span= "answered #{created_date(answer)}"
+    => answer.body
     div class="answer_#{answer.id}_rating rating"
       = answer.rating
     - if can? :rating_up, answer
@@ -21,9 +24,9 @@
       br
     - if can? :destroy, answer
       p
-        = link_to 'Delete answer', answer_path(answer), class: 'delete-answer-link', method: :delete, remote: true, data: { confirm: 'Are you sure?' }
+        => link_to 'edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
         |   |
-        = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+        =< link_to 'delete answer', answer_path(answer), class: 'delete-answer-link', method: :delete, remote: true, data: { confirm: 'Are you sure?' }
       p
         div id='answer-update-errors-#{answer.id}'
         = form_for answer, remote: true do |f|
@@ -40,10 +43,11 @@
           = f.submit
           end
     - if can? :create, Comment
-      = link_to 'Add comment', '', class: 'add-comment-link', data: { resource_id: answer.id, resource_type: "answer" }
+      = link_to 'add a comment', '', class: 'add-comment-link', data: { resource_id: answer.id, resource_type: "answer" }
       br
       div id="comment-errors-answer-#{answer.id}"
       = render 'comments/form', commentable: answer
     div class="answer_#{answer.id}_comments comments"
       b Comments:
       = render answer.comments
+  hr

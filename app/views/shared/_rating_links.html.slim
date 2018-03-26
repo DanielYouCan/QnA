@@ -1,6 +1,5 @@
 - classname = resource.is_a?(Question) ? 'vote_question' : 'vote'
 
 div class="#{classname}"
-  = link_to (octicon 'thumbsup', height: 20, class: 'text-notice'), polymorphic_path(resource, action: :rating_up), method: :patch, remote: true
-  |   |
+  => link_to (octicon 'thumbsup', height: 20, class: 'text-notice'), polymorphic_path(resource, action: :rating_up), method: :patch, remote: true
   = link_to (octicon 'thumbsdown', height: 20, class: 'text-danger'), polymorphic_path(resource, action: :rating_down), method: :patch, remote: true

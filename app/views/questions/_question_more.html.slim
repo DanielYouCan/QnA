@@ -1,14 +1,22 @@
 - if @question.persisted?
   .question
     h1= @question.title
-    i= "Author: #{user_name(@question)}"
-    br
-    = @question.body
-    p
+    .
+      .info
+        i= "Author: #{author(@question)}"
+        br
+        span= "asked #{created_date(@question)}"
       - if current_user && @subscription.nil?
-        = link_to 'Subscribe to question', question_subscriptions_path(@question), method: :post
+        i= link_to 'Subscribe to question', question_subscriptions_path(@question), method: :post
       - if @subscription
-        = link_to 'Unsubscribe', subscription_path(@subscription), method: :delete
+        i= link_to 'Unsubscribe', subscription_path(@subscription), method: :delete
+    - if can? :update, @question
+      => link_to 'Edit question', '', class: 'edit-question-link btn btn-info'
+      = link_to 'Delete question', question_path(@question), class: 'btn btn-danger', method: :delete
+      .question-update-errors
+      = render 'edit_form'
+    hr
+    = @question.body
     div class="question_rating rating"
       = @question.rating
     - if can? :rating_up, @question
@@ -20,18 +28,12 @@
         b Attachments:
         ul
           = render @question.attachments
-
-    - if can? :update, @question
-      = link_to 'Delete question', question_path(@question), method: :delete
-      |    |
-      = link_to 'Edit question', '', class: 'edit-question-link'
-      .question-update-errors
-      = render 'edit_form'
     - if can? :create, Comment
-      = link_to 'Add comment', '', class: 'add-comment-link', data: { resource_id: @question.id, resource_type: "question" }
+      = link_to 'add a comment', '', class: 'add-comment-link', data: { resource_id: @question.id, resource_type: "question" }
       br
       div id="comment-errors-question-#{@question.id}"
       = render 'comments/form', commentable: @question
+    hr
     div class="question_#{@question.id}_comments comments"
-      b Comments:
       = render @question.comments
+  hr
