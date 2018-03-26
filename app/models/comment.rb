@@ -14,7 +14,7 @@ class Comment < ApplicationRecord
 
     ActionCable.server.broadcast(
       "question:#{question_id}:comments",
-        { comment: self.to_json } )
+        { comment: self.to_json(include: :user) } )
   end
-  
+
 end

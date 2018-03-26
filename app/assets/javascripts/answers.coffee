@@ -8,7 +8,7 @@ vote = ->
     answer = $.parseJSON(e.detail[2].responseText).answer
     $(".answer_#{answer.id}_rating").html(answer.rating)
     $(this).hide()
-    $(this).next().children().first().html("Cancel vote").show()
+    $(this).next().children().first().html("cancel vote").show()
     $(this).next().children().first().attr("href", "/answers/#{answer.id}/cancel_vote")
   .bind 'ajax:error', (e) ->
     id = $.parseJSON(e.detail[0])
@@ -19,6 +19,7 @@ cancel_vote = ->
     answer = $.parseJSON(e.detail[2].responseText).answer
     $(".answer_#{answer.id}_rating").html(answer.rating)
     $(this).hide()
+    $('.vote').show()
   .bind 'ajax:error', (e) ->
     id = $.parseJSON(e.detail[0])
     $('.vote_error_' + id).html("You haven't voted yet")

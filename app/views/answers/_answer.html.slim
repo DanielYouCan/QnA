@@ -1,49 +1,39 @@
 - if answer.persisted?
   div class='answer_#{answer.id} answer'
+    - if answer.best?
+      = octicon 'check', height: 32, class: 'text-success'
     .info
       i= "Author: #{author(answer)}"
       br
       span= "answered #{created_date(answer)}"
-    => answer.body
     div class="answer_#{answer.id}_rating rating"
       = answer.rating
     - if can? :rating_up, answer
       = render 'shared/rating_links', resource: answer
     = render 'shared/cancel_vote', resource: answer
       div class="vote_error_#{answer.id}"
+    => answer.body
+    br
     - if answer.attachments.present?
       div class="attachments_answer_#{answer.id}"
         b Attachments:
         ul
           = render answer.attachments
-    - if answer.best?
-      = octicon 'check', height: 32, class: 'text-success'
-      br
     - if can? :set_best, answer
       = link_to 'Set best', set_best_answer_path(answer), method: :patch, class: 'best-answer-link', data: { answer_id: answer.id }, remote: true
       br
     - if can? :destroy, answer
       p
-        => link_to 'edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+        => link_to 'hide', '', class: "hide-link hide-answer-link hide-answer_#{answer.id}-form", data: { answer_id: answer.id }
+        => link_to 'edit', '', class: "edit-answer-link edit-answer_#{answer.id}-link", data: { answer_id: answer.id }
         |   |
         =< link_to 'delete answer', answer_path(answer), class: 'delete-answer-link', method: :delete, remote: true, data: { confirm: 'Are you sure?' }
       p
         div id='answer-update-errors-#{answer.id}'
-        = form_for answer, remote: true do |f|
-          = f.label :body, 'Answer'
-          br
-          = f.text_area :body, id: :answer_body
-          br
-          b Attachments:
-          .attachments
-            = f.fields_for :attachments, answer.attachments.build do |attachment|
-              = render 'attachment_fields', f: attachment
-          .links
-            = render 'shared/link_attachments', f: f
-          = f.submit
-          end
+        = render 'answers/edit_form', answer: answer
     - if can? :create, Comment
-      = link_to 'add a comment', '', class: 'add-comment-link', data: { resource_id: answer.id, resource_type: "answer" }
+      => link_to 'hide', '', class: "hide-link hide-add-comment-link hide-comment-form_answer_#{answer.id}", data: { resource_id: answer.id, resource_type: "answer" }
+      = link_to 'add a comment', '', class: "add-comment-link add-comment-link_answer_#{answer.id}", data: { resource_id: answer.id, resource_type: "answer" }
       br
       div id="comment-errors-answer-#{answer.id}"
       = render 'comments/form', commentable: answer

@@ -42,7 +42,7 @@ feature 'Answer editing', %q{
       click_on 'edit'
       within '.answers' do
         fill_in 'Answer', with: 'edited answer'
-        click_on 'Update Answer'
+        click_on 'Update answer'
 
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'edited answer'
@@ -54,7 +54,7 @@ feature 'Answer editing', %q{
       click_on 'edit'
       within '.answers' do
         fill_in 'Answer', with: ''
-        click_on 'Update Answer'
+        click_on 'Update answer'
 
         expect(page).to have_content answer.body
         expect(page).to have_content "Body can't be blank"

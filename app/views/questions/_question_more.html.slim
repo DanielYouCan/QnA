@@ -11,25 +11,28 @@
       - if @subscription
         i= link_to 'Unsubscribe', subscription_path(@subscription), method: :delete
     - if can? :update, @question
+      => link_to 'hide', '', class: "btn btn-warning hide-link hide-question-link", data: { question_id: @question.id }
       => link_to 'Edit question', '', class: 'edit-question-link btn btn-info'
       = link_to 'Delete question', question_path(@question), class: 'btn btn-danger', method: :delete
       .question-update-errors
       = render 'edit_form'
     hr
-    = @question.body
     div class="question_rating rating"
       = @question.rating
     - if can? :rating_up, @question
       = render 'shared/rating_links', resource: @question
     = render 'shared/cancel_vote', resource: @question
     div class="vote_error_question"
+    = @question.body
+    br
     - if @question.attachments.present?
       .attachments_question
         b Attachments:
         ul
           = render @question.attachments
     - if can? :create, Comment
-      = link_to 'add a comment', '', class: 'add-comment-link', data: { resource_id: @question.id, resource_type: "question" }
+      => link_to 'hide', '', class: "hide-link hide-add-comment-link hide-comment-form_question_#{@question.id}", data: { resource_id: @question.id, resource_type: "question" }
+      = link_to 'add a comment', '', class: "add-comment-link add-comment-link_question_#{@question.id}", data: { resource_id: @question.id, resource_type: "question" }
       br
       div id="comment-errors-question-#{@question.id}"
       = render 'comments/form', commentable: @question

@@ -5,7 +5,8 @@
     span.text-secondary= " #{created_date(comment)}"
     br
     - if can? :destroy, comment
-      => link_to 'edit comment', '', class: 'edit-comment-link', data: { comment_id: comment.id }
+      => link_to 'hide', '', class: "hide-link hide-comment-link hide-comment_#{comment.id}-form", data: { comment_id: comment.id }
+      => link_to 'edit comment', '', class: "edit-comment-link edit-comment_#{comment.id}-link", data: { comment_id: comment.id }
       |   |
       =< link_to 'delete comment', comment_path(comment), class: 'delete-comment-link', method: :delete, remote: true, data: { confirm: 'Are you sure?' }
       div id="comment-update-errors-#{comment.id}"
