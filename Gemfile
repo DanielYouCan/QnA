@@ -49,6 +49,7 @@ gem "responders"
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
+gem 'omniauth-vkontakte'
 gem 'cancancan'
 gem 'doorkeeper', '4.2.6'
 gem 'active_model_serializers'
