@@ -63,7 +63,7 @@ class User < ApplicationRecord
 
     User.transaction do
       password = Devise.friendly_token[0, 20]
-      username = auth.info[:nickname] || auth.info[:name]
+      username = auth.info[:name].present? ? auth.info[:name] : auth.info[:nickname]
       user = User.create!(email: email, password: password, password_confirmation: password, username: username)
       user.create_authorization(auth)
     end
