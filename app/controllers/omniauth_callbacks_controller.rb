@@ -9,6 +9,10 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     provider("Twitter")
   end
 
+  def vkontakte
+    provider("Vkontakte")
+  end
+
   private
 
   def provider(kind)

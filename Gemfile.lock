@@ -217,6 +217,8 @@ GEM
     omniauth-twitter (1.4.0)
       omniauth-oauth (~> 1.1)
       rack
+    omniauth-vkontakte (1.4.1)
+      omniauth-oauth2 (~> 1.2)
     orderly (0.0.3)
       capybara (>= 1.1)
       rspec (>= 2.14)
@@ -413,6 +415,7 @@ DEPENDENCIES
   omniauth
   omniauth-facebook
   omniauth-twitter
+  omniauth-vkontakte
   orderly
   pg (~> 0.18)
   puma (~> 3.7)

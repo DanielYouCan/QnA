@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :subscribed_questions, through: :subscriptions, source: :question
 
   devise :database_authenticatable, :registerable, :confirmable,
-         :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: %i[facebook twitter]
+         :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: %i[facebook twitter vkontakte]
 
   validates :username, presence: true, uniqueness: true, length: { minimum: 5 }
 
