@@ -8,15 +8,6 @@ set :repo_url, "git@github.com:DanielYouCan/QnA.git"
 set :deploy_to, "/home/deployer/qna"
 set :deploy_user, 'deployer'
 
-# Default value for :format is :airbrussh.
-# set :format, :airbrussh
-
-# You can configure the Airbrussh format using :format_options.
-# These are the defaults.
-# set :format_options, command_output: true, log_file: "log/capistrano.log", color: :auto, truncate: :auto
-
-# Default value for :pty is false
-# set :pty, true
 
 # Default value for :linked_files is []
 append :linked_files, "config/database.yml", "config/secrets.yml", ".env.production"
@@ -26,10 +17,52 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 
 set :rvm1_map_bins, fetch(:rvm1_map_bins).to_a.concat(%w(sidekiq sidekiqctl))
 set :sidekiq_config, -> { File.join(shared_path, 'config', 'sidekiq.yml') }
-# Default value for local_user is ENV['USER']
-# set :local_user, -> { `git config user.name`.chomp }
 
-# Uncomment the following to require manually verifying the host key before first deploy.
-# set :ssh_options, verify_host_key: :secure
+namespace :deploy do
 
-set :passenger_restart_with_touch, false
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      invoke 'unicorn:restart'
+    end
+  end
+
+  after :publishing, :restart
+end
+
+namespace :sphinx do
+  desc 'Start sphinx'
+  task :restart do
+    on roles(:app) do
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          execute :bundle, "exec rake ts:start"
+        end
+      end
+    end
+  end
+
+  desc 'Stop sphinx'
+  task :restart do
+    on roles(:app) do
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          execute :bundle, "exec rake ts:stop"
+        end
+      end
+    end
+  end
+
+  desc 'Restart sphinx'
+  task :restart do
+    on roles(:app) do
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          execute :bundle, "exec rake ts:restart"
+        end
+      end
+    end
+  end
+end
+
+after 'deploy:restart', 'sphinx:restart'

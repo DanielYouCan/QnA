@@ -60,6 +60,7 @@ gem 'whenever', require: false
 gem 'mysql2'
 gem 'thinking-sphinx', '3.3.0'
 gem 'therubyracer'
+gem 'unicorn'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -95,6 +96,7 @@ group :development do
   gem 'capistrano-rvm', require: false
   gem 'capistrano-passenger', require: false
   gem 'capistrano-sidekiq', require: false
+  gem 'capistrano3-unicorn', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
