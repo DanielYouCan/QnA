@@ -31,8 +31,19 @@ namespace :deploy do
 end
 
 namespace :sphinx do
+  desc 'Index sphinx'
+  task :index do
+    on roles(:app) do
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          execute :bundle, "exec rake ts:index"
+        end
+      end
+    end
+  end
+
   desc 'Start sphinx'
-  task :restart do
+  task :start do
     on roles(:app) do
       within current_path do
         with rails_env: fetch(:rails_env) do
@@ -43,7 +54,7 @@ namespace :sphinx do
   end
 
   desc 'Stop sphinx'
-  task :restart do
+  task :stop do
     on roles(:app) do
       within current_path do
         with rails_env: fetch(:rails_env) do
@@ -65,4 +76,5 @@ namespace :sphinx do
   end
 end
 
-after 'deploy:restart', 'sphinx:restart'
+after 'deploy:restart', 'sphinx:index'
+after 'sphinx:index', 'sphinx:restart'
