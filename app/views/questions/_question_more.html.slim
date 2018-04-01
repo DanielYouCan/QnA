@@ -1,11 +1,13 @@
 - if @question.persisted?
   .question
-    h1= @question.title
+    - cache_unless current_user.try(:admin), ["question_info", @question] do
+      h1= @question.title
+      .
+        .info
+          i= "Author: #{author(@question)}"
+          br
+          span= "asked #{created_date(@question)}"
     .
-      .info
-        i= "Author: #{author(@question)}"
-        br
-        span= "asked #{created_date(@question)}"
       - if current_user && @subscription.nil?
         i= link_to 'Subscribe to question', question_subscriptions_path(@question), method: :post
       - if @subscription
@@ -17,19 +19,21 @@
       .question-update-errors
       = render 'edit_form'
     hr
-    div class="question_rating rating"
-      = @question.rating
+    - cache_unless current_user.try(:admin), ["question_rating", @question] do
+      div class="question_rating rating"
+        = @question.rating
     - if can? :rating_up, @question
       = render 'shared/rating_links', resource: @question
     = render 'shared/cancel_vote', resource: @question
     div class="vote_error_question"
-    = @question.body
+    - cache_unless current_user.try(:admin), ["question_body", @question] do
+      = @question.body
     br
     - if @question.attachments.present?
       .attachments_question
         b Attachments:
         ul
-          = render @question.attachments
+          = render @question.attachments, cache: true
     - if can? :create, Comment
       => link_to 'hide', '', class: "hide-link hide-add-comment-link hide-comment-form_question_#{@question.id}", data: { resource_id: @question.id, resource_type: "question" }
       = link_to 'add a comment', '', class: "add-comment-link add-comment-link_question_#{@question.id}", data: { resource_id: @question.id, resource_type: "question" }
@@ -38,5 +42,5 @@
       = render 'comments/form', commentable: @question
     hr
     div class="question_#{@question.id}_comments comments"
-      = render @question.comments
+      = render @question.comments, cache: true
   hr

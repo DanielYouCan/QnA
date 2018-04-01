@@ -1,5 +1,6 @@
 .attachment
-  li=> link_to attachment.file.identifier, attachment.file.url
+  - cache attachment do
+    li=> link_to attachment.file.identifier, attachment.file.url
   - if can? :destroy, attachment
     =< link_to (octicon 'trashcan', height: 32, class: 'text-muted delete-file'),
       attachment_path(attachment), method: :delete, remote: true

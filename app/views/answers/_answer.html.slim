@@ -1,24 +1,26 @@
 - if answer.persisted?
   div class='answer_#{answer.id} answer'
-    - if answer.best?
-      = octicon 'check', height: 32, class: 'text-success'
-    .info
-      i= "Author: #{author(answer)}"
-      br
-      span= "answered #{created_date(answer)}"
-    div class="answer_#{answer.id}_rating rating"
-      = answer.rating
+    - cache_unless current_user.try(:admin), [ "answer_info", answer ] do
+      - if answer.best?
+        = octicon 'check', height: 32, class: 'text-success'
+      .info
+        i= "Author: #{author(answer)}"
+        br
+        span= "answered #{created_date(answer)}"
+      div class="answer_#{answer.id}_rating rating"
+        = answer.rating
     - if can? :rating_up, answer
       = render 'shared/rating_links', resource: answer
     = render 'shared/cancel_vote', resource: answer
       div class="vote_error_#{answer.id}"
-    => answer.body
+    - cache_unless current_user.try(:admin), ["answer_body", answer] do
+      => answer.body
     br
     - if answer.attachments.present?
       div class="attachments_answer_#{answer.id}"
         b Attachments:
         ul
-          = render answer.attachments
+          = render answer.attachments, cache: true
     - if can? :set_best, answer
       = link_to 'Set best', set_best_answer_path(answer), method: :patch, class: 'best-answer-link', data: { answer_id: answer.id }, remote: true
       br
@@ -39,5 +41,5 @@
       = render 'comments/form', commentable: answer
     div class="answer_#{answer.id}_comments comments"
       b Comments:
-      = render answer.comments
+      = render answer.comments, cache: true
   hr

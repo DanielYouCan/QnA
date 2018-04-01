@@ -61,6 +61,7 @@ gem 'mysql2'
 gem 'thinking-sphinx', '3.3.0'
 gem 'therubyracer'
 gem 'unicorn'
+gem 'redis-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

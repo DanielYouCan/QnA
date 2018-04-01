@@ -6,6 +6,8 @@ class SearchController < ApplicationController
     search = Search.new(search_params)
 
     if search.valid?
+      @search_body = search_params[:search_body]
+      @search_object = search_params[:search_object]
       @results = search.search_handler
     else
       redirect_to root_path
