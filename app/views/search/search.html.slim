@@ -1,5 +1,6 @@
 h3 Search results:
-- @results.each do |result|
-  .result
-    =results_handler(result)
-  hr
+- cache search_cache(@search_object, @search_body, @results) do
+  - @results.each do |result|
+    .result
+      =results_handler(result)
+    hr

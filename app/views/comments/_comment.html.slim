@@ -1,9 +1,10 @@
 - if comment.persisted?
   div class="comment_#{comment.id} comment"
-    = comment.body
-    span.text-primary= " - #{author(comment)}"
-    span.text-secondary= " #{created_date(comment)}"
-    br
+    - cache comment do
+      = comment.body
+      span.text-primary= " - #{author(comment)}"
+      span.text-secondary= " #{created_date(comment)}"
+      br
     - if can? :destroy, comment
       => link_to 'hide', '', class: "hide-link hide-comment-link hide-comment_#{comment.id}-form", data: { comment_id: comment.id }
       => link_to 'edit comment', '', class: "edit-comment-link edit-comment_#{comment.id}-link", data: { comment_id: comment.id }

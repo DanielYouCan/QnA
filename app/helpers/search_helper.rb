@@ -16,4 +16,10 @@ module SearchHelper
     end
   end
 
+  def search_cache(object, body, results)
+    size = results.size
+    max_updated_at = results.max_by(&:updated_at).updated_at.try(:utc).try(:to_s)
+    "#{object}/#{body}-#{size}-#{max_updated_at}"
+  end
+
 end
